@@ -78,10 +78,11 @@ passport.use( new googleStrategy({
     }
 }))
 
+//Welke data er wordt bijgehouden van deuser
 passport.serializeUser(( user, done) => {
     return done(null, user);
 })
-
+//ID van de sessie wordt genomen en daarmee wordt de volledige user van de DB
 passport.deserializeUser((user, done) => {
     return done(null, user);
 })
