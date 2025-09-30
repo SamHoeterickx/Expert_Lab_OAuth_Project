@@ -1,12 +1,18 @@
 require('dotenv').config();
 
 const express = require('express');
+const googleStrategy = require('passport-google-oauth20').Strategy;
+const { MongoClient } = require('mongodb')
 const passport = require('passport');
 const session = require('express-session');
-const googleStrategy = require('passport-google-oauth20').Strategy;
 
 const app = express();
 const port = 3000;
+
+//DB Setup
+const uri = process.env.DB_URI;
+const client = new MongoClient(uri)
+const DB_NAME = "Google_OAuth_Test";
 
 //Setup session
 //Resave false --> doesn't resave when session isnt changed
@@ -22,10 +28,22 @@ app.use(passport.session());
 
 app.use(express.json());
 
+const main = async() => {
+    await client.connect();
+    console.log('Connected successfully to server');
+
+    const db = client.db(DB_NAME);
+    console.log('Connected successfully to database');
+
+    return 'done.'
+
+}
+
+main().then(console.log).catch(console.error).finally(() => client.close());
 
 passport.use( new googleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/callback"
 }, (accesToken, refreshToken, profile, done) => {
     return done(null, profile)
