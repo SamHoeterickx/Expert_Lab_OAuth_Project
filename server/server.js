@@ -69,7 +69,12 @@ app.get('/profile', (req, res) => {
     }
 })
 
-
+app.get("/logout", (req, res, next) => {
+    req.logOut(function(err) {
+        if (err) { return next(err); }
+        res.redirect("/");
+    });
+})
 
 app.listen( port, () => {
     console.log(`Example of app is listening on port: ${port}`);
