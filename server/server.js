@@ -55,7 +55,19 @@ app.get('/auth/google/callback', passport.authenticate('google', {
     }
 );
 
-
+app.get('/profile', (req, res) => {
+    console.log(req.user);
+    try{
+        if(req.user){
+            res.send(`<h1>Welcome ${req.user.displayName}</h1><a href="/logout">logout</a>`)
+        }else {
+            res.status(404).redirect('/');
+        }
+    }catch(error){
+        console.error(error);
+        res.status(404).redirect('/');
+    }
+})
 
 
 
