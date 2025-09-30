@@ -44,6 +44,21 @@ app.get('/', (req, res) => {
 })
 
 
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ["profile", "email", "openid"]
+}))
+
+app.get('/auth/google/callback', passport.authenticate('google', {
+        failureRedirect: "/"
+    }), (req, res) => {
+        res.status(200).redirect("/profile");
+    }
+);
+
+
+
+
+
 app.listen( port, () => {
     console.log(`Example of app is listening on port: ${port}`);
 })
