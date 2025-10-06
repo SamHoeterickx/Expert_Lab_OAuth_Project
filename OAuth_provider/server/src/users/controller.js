@@ -1,10 +1,10 @@
-const { createUser, findByEmail} = require('./model.js');
+const { createUser, findUserByEmail, verifyPassword} = require('./model.js');
 
 const register = async(req, res, collection) => {
 
     try{
         const { name, email, password, repeatPassword } = req.body;
-        const existingUser = await findByEmail(collection, req.body.email);
+        const existingUser = await findUserByEmail(collection, req.body.email);
 
         if(!name, !email, !password, !repeatPassword){
             return res.status(422).send({
@@ -44,7 +44,42 @@ const register = async(req, res, collection) => {
 const login = async(req, res, collection) => {
     try{
 
-        
+        const {email, password} = req.body;
+        const user = await findUserByEmail(collection, email);
+
+        if(!email, !password){
+            res.status(422).send({
+                status: 422,
+                message: "Missing login info"
+            });
+        }
+
+        if(!user){
+            res.status(401).send({
+                status: 401,
+                message: "Invalid Credentials"
+            })
+        }
+
+        console.log(user)
+
+        const match = await verifyPassword(password, user.password);
+
+        if(!match){
+            res.status(401).send({
+                status: 401,
+                message: "Invalid Credentials"
+            })
+        }
+
+        req.session.userid = user._id;
+
+        console.log(req.session);
+
+        res.status(200).send({
+            status: 200,
+            message: "Login succesfull"
+        })
 
     } catch(error){
         console.error('Login error:', error);

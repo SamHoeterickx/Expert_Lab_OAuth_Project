@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const createUser = async (collection, { name, email, password}) => {
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const result =  await collection.insertOne({
         name: name,
@@ -12,7 +12,7 @@ const createUser = async (collection, { name, email, password}) => {
     return result;
 }
 
-const findByEmail = async (collection, email) => {
+const findUserByEmail = async (collection, email) => {
     return await collection.findOne({ email: email });
 }
 
@@ -22,5 +22,6 @@ const verifyPassword = async (password, hashedpassword) => {
 
 module.exports = {
     createUser,
-    findByEmail
+    findUserByEmail,
+    verifyPassword
 }
