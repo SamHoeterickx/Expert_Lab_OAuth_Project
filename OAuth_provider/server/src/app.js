@@ -10,7 +10,7 @@ const port = 3000;
 //DB Setup
 const uri = process.env.DB_URI;
 const client = new MongoClient(uri)
-const DB_NAME = "OAuth_provider";
+const DB_NAME = "OAuth_provider_expert_lab_2025";
 const database = client.db(DB_NAME);
 
 //Setup session
@@ -22,9 +22,7 @@ app.use(session({
     saveUninitialized: true
 }))
 
-app.use(express.session());
 app.use(express.json());
-
 
 const startServer = async () => {
     try {
@@ -40,3 +38,7 @@ const startServer = async () => {
 };
 
 startServer();
+
+app.use('/', (req, res) => {
+    res.send('Hello auth provider')
+})
