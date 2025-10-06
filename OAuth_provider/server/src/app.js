@@ -25,8 +25,10 @@ app.use(session({
 app.use(express.json());
 
 const userRoutes = require('./users/route')(database.collection('users'));
+const authRoutes = require('./auth/route')(database.collection('OAuth'));
 
 app.use('/api', userRoutes);
+app.use('/api/auth', authRoutes);
 
 const startServer = async () => {
     try {

@@ -37,7 +37,10 @@ const register = async(req, res, collection) => {
 
     } catch (error) {
         console.error('Register error:', error);
-        res.status(500).send({message: error.message});
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        });
     }
 }
 
@@ -83,7 +86,10 @@ const login = async(req, res, collection) => {
 
     } catch(error){
         console.error('Login error:', error);
-        res.status(500).send({message: error.message})
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
     }
 }
 
