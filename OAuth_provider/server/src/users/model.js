@@ -4,8 +4,8 @@ const createUser = async (collection, { name, email, password}) => {
     const hashedPassword = bcrypt.hash(password, 10);
 
     const result =  await collection.insertOne({
-        name: req.body.name,
-        email: req.body.email,
+        name: name,
+        email: email,
         password: hashedPassword
     });
 
