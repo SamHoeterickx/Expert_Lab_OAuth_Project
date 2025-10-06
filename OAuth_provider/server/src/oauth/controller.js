@@ -71,7 +71,6 @@ const authConsest = async (req, res, collection) => {
         const authCode = saveAuthCode(userId, client_id);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
-        console.log(redirectURL);
         return res.redirect(redirectURL);
 
     }catch(error){

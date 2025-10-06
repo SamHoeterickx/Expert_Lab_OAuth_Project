@@ -32,15 +32,14 @@ const generateAuthCode = () => {
 
 const saveAuthCode = (userId, client_id, expiresIn) => {
     const authCode = generateAuthCode();
-    console.log(authCode);
-    
+
     pendingAuthCodes[authCode] = {
         userId: userId,
         client_id: client_id,
         expires_at: Date.now() - expiresIn
     };
 
-    console.log(pendingAuthCodes);
+    return authCode
 }
 
 const getAuthCode = (authCode) => {
