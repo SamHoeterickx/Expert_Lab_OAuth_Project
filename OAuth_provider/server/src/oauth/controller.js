@@ -1,9 +1,10 @@
 const { 
-    createCryptoString, 
-    createNewOAuthClient, 
-    findClientByClientid, 
-    generateAuthCode,
-    saveAuthCode
+    createCryptoString,
+    createNewOAuthClient,
+    findClientByClientid,
+    saveAuthCode,
+    getAuthCode,
+    deleteAuthCode
 } = require('./model');
 
 const authorize = async(req, res, collection) => {
@@ -67,14 +68,11 @@ const authConsest = async (req, res, collection) => {
             res.redirect(redirectURL);
         }
 
-        const authCode = generateAuthCode()
+        const authCode = saveAuthCode(userId, client_id);
 
-        if(authCode){
-            saveAuthCode(userId, client_id, authCode);
-        }
-
-
-        console.log( {client_id, userId, redirect_uri, state, approved })
+        const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
+        console.log(redirectURL);
+        return res.redirect(redirectURL);
 
     }catch(error){
         console.error('Error while giving consest', error);

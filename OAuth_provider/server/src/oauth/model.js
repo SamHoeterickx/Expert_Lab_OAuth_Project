@@ -30,18 +30,41 @@ const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
 
-const saveAuthCode = (userId, client_id, authCode, expiresIn) => {
+const saveAuthCode = (userId, client_id, expiresIn) => {
+    const authCode = generateAuthCode();
+    console.log(authCode);
+    
     pendingAuthCodes[authCode] = {
         userId: userId,
         client_id: client_id,
         expires_at: Date.now() - expiresIn
     };
+
+    console.log(pendingAuthCodes);
+}
+
+const getAuthCode = (authCode) => {
+    const result = pendingAuthCodes[authCode];
+
+    if(!result) return null;
+
+    if(result.expires_at > Date.now()){
+        return result
+    }else{
+        deleteAuthCode(authCode);
+        return null;
+    }
+}
+
+const deleteAuthCode = (authCode) => {
+    delete pendingAuthCodes[authCode];
 }
 
 module.exports = {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
-    generateAuthCode,
-    saveAuthCode
+    saveAuthCode,
+    getAuthCode,
+    deleteAuthCode
 }
