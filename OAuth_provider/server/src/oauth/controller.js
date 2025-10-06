@@ -1,4 +1,10 @@
-const { createCryptoString, createNewOAuthClient, findClientByClientid } = require('./model');
+const { 
+    createCryptoString, 
+    createNewOAuthClient, 
+    findClientByClientid, 
+    generateAuthCode,
+    saveAuthCode
+} = require('./model');
 
 const authorize = async(req, res, collection) => {
     try{
@@ -60,6 +66,13 @@ const authConsest = async (req, res, collection) => {
             const redirectURL = `${redirect_uri}?error=access_denied&state=${state}`;
             res.redirect(redirectURL);
         }
+
+        const authCode = generateAuthCode()
+
+        if(authCode){
+            saveAuthCode(userId, client_id, authCode);
+        }
+
 
         console.log( {client_id, userId, redirect_uri, state, approved })
 

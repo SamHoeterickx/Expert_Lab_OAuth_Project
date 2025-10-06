@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const pendingAuthCodes = {};
+
 const createCryptoString = (length, type) => {
     return crypto.randomBytes(length).toString(type);
 }
@@ -24,8 +26,22 @@ const findClientByClientid = async (collection, client_id) => {
     return result;
 }
 
+const generateAuthCode = () => {
+    return crypto.randomBytes(10).toString('hex');
+}
+
+const saveAuthCode = (userId, client_id, authCode, expiresIn) => {
+    pendingAuthCodes[authCode] = {
+        userId: userId,
+        client_id: client_id,
+        expires_at: Date.now() - expiresIn
+    };
+}
+
 module.exports = {
     createCryptoString,
     createNewOAuthClient,
-    findClientByClientid
+    findClientByClientid,
+    generateAuthCode,
+    saveAuthCode
 }
