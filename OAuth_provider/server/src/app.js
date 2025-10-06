@@ -60,7 +60,7 @@ app.post('/api/register', async (req, res) => {
     }
 
     try{
-       if(!existingUser){
+        if(!existingUser){
             if(!req.body.password || !req.body.name || !req.body.email || !req.body.repeatPassword){
                 res.status(422).send({
                     status: 422,
@@ -87,7 +87,12 @@ app.post('/api/register', async (req, res) => {
                     message: "Passwords don't match"
                 })
             }
-       }
+        }else{
+            res.status(409).send({
+                status: 409,
+                message: "Email already in use"
+            })
+        }
 
 
     } catch (error) {
