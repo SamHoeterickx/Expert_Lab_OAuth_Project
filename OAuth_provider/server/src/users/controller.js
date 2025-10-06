@@ -42,7 +42,14 @@ const register = async(req, res, collection) => {
 }
 
 const login = async(req, res, collection) => {
+    try{
 
+        
+
+    } catch(error){
+        console.error('Login error:', error);
+        res.status(500).send({message: error.message})
+    }
 }
 
 module.exports = {
