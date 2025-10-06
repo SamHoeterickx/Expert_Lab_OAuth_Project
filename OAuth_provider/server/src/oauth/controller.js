@@ -44,7 +44,7 @@ const authorize = async(req, res, collection) => {
     }
 }
 
-const authConsest = async (req, res, collection) => {
+const authConsent = async (req, res, collection) => {
     try{
 
         const {client_id, userId, redirect_uri, state, approved } = req.body
@@ -114,5 +114,5 @@ const registerClient = async(req, res, collection) => {
 module.exports = {
     registerClient,
     authorize,
-    authConsest,
+    authConsent,
 }
