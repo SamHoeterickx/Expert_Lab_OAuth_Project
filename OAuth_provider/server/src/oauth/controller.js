@@ -36,8 +36,32 @@ const authorize = async(req, res, collection) => {
     }
 }
 
-const authConsest = (req, res, collection) => {
+const authConsest = async (req, res, collection) => {
     try{
+
+        const {client_id, userId, redirect_uri, state, approved } = req.body
+
+        const client = await findClientByClientid(collection, client_id);
+        if(!client){
+            return res.status(404).send({
+                status: 404,
+                message: 'OAuth client not found'
+            })
+        }
+
+        if(redirect_uri !== client.redirect_uri){
+            return res.status(400).send({
+                status: 400,
+                message: "Redirect uri doesn't match"
+            })
+        }
+
+        if(!approved){
+            const redirectURL = `${redirect_uri}?error=access_denied&state=${state}`;
+            res.redirect(redirectURL);
+        }
+
+        console.log( {client_id, userId, redirect_uri, state, approved })
 
     }catch(error){
         console.error('Error while giving consest', error);
