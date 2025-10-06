@@ -6,6 +6,7 @@ import { App } from "../app/App";
 //Routes
 import { HOME_ROUTE } from "../home/home.route";
 import { LOG_IN_ROUTE } from "../login/login.route";
+import { AUTH_ROUTE } from "../auth/auth.route";
 
 export const Root = () => {
     const ROUTE = createHashRouter([
@@ -20,6 +21,10 @@ export const Root = () => {
                 {
                     path: LOG_IN_ROUTE.path,
                     element: LOG_IN_ROUTE.element
+                },
+                {
+                    path: AUTH_ROUTE.path,
+                    element: AUTH_ROUTE.element
                 }
             ]
         }

@@ -4,12 +4,13 @@ const {
     findClientByClientid,
     saveAuthCode,
     getAuthCode,
-    deleteAuthCode
+    deleteAuthCode,
 } = require('./model');
 
 const authorize = async(req, res, collection) => {
     try{
 
+        //State wordt in frontend gegenereerd
         const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
         if(!req.session.userId){
@@ -113,5 +114,5 @@ const registerClient = async(req, res, collection) => {
 module.exports = {
     registerClient,
     authorize,
-    authConsest
+    authConsest,
 }

@@ -33,6 +33,8 @@ const generateAuthCode = () => {
 const saveAuthCode = (userId, client_id, expiresIn) => {
     const authCode = generateAuthCode();
 
+    //expires_at gaat door Date.now - expiresIn in het verleden liggen waardoor deze verwijderd wordt
+
     pendingAuthCodes[authCode] = {
         userId: userId,
         client_id: client_id,
@@ -48,7 +50,7 @@ const getAuthCode = (authCode) => {
     if(!result) return null;
 
     if(result.expires_at > Date.now()){
-        return result
+        return result;
     }else{
         deleteAuthCode(authCode);
         return null;
