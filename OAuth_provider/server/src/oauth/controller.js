@@ -1,15 +1,46 @@
-const { createCryptoString, createNewOAuthClient } = require('./model');
+const { createCryptoString, createNewOAuthClient, findClientByClientid } = require('./model');
 
 const authorize = async(req, res, collection) => {
     try{
 
-        res.status(200).send({
-            status: 200,
-            message: "Authorization succesfull"
-        })
+        const { response_type, client_id, redirect_uri, scope, state } = req.query;
+
+        if(!req.session.userId){
+            return res.redirect('http://localhost:5173/api/login');
+        }
+        const userId = req.session.userId;
+
+        const client = await findClientByClientid(collection, client_id);
+        
+
+        if(!client){
+            return res.status(404).send({
+                status: 404,
+                message: 'OAuth client not found'
+            })
+        }
+
+        if(redirect_uri !== client.redirect_uri){
+            return res.status(400).send({
+                status: 400,
+                message: "Redirect uri doesn't match"
+            })
+        }
 
     }catch (error){
         console.error('Authorization client error:', error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
+}
+
+const authConsest = (req, res, collection) => {
+    try{
+
+    }catch(error){
+        console.error('Error while giving consest', error);
         res.status(500).send({
             status: 500,
             message: error.message
@@ -28,7 +59,7 @@ const registerClient = async(req, res, collection) => {
 
         const newClient = await createNewOAuthClient(collection, {client_name, redirect_uri, scope, client_uri, owner_email, client_id, client_secret})
         if(newClient){
-            res.status(201).send({
+            return res.status(201).send({
                 status: 201,
                 message: "OAuth client registered succesfully",
                 client_id: client_id,
@@ -47,5 +78,6 @@ const registerClient = async(req, res, collection) => {
 
 module.exports = {
     registerClient,
-    authorize
+    authorize,
+    authConsest
 }

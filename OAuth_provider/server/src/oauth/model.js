@@ -18,7 +18,14 @@ const createNewOAuthClient = async (collection, { client_name, redirect_uri, sco
     return result
 }
 
+const findClientByClientid = async (collection, client_id) => {
+    const result = await collection.findOne({ client_id: client_id });
+
+    return result;
+}
+
 module.exports = {
     createCryptoString,
-    createNewOAuthClient
+    createNewOAuthClient,
+    findClientByClientid
 }

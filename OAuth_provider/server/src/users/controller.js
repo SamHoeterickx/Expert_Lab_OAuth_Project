@@ -81,7 +81,8 @@ const login = async(req, res, collection) => {
 
         res.status(200).send({
             status: 200,
-            message: "Login succesfull"
+            message: "Login succesfull",
+            sessionId: req.session.userid
         })
 
     } catch(error){
