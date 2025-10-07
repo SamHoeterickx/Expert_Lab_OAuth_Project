@@ -111,7 +111,7 @@ const registerClient = async(req, res, collection) => {
     }
 }
 
-const token = async (req, res) => {
+const token = async (req, res, collection) => {
     try{
 
         res.status(200).send({
@@ -132,4 +132,5 @@ module.exports = {
     registerClient,
     authorize,
     authConsent,
+    token
 }
