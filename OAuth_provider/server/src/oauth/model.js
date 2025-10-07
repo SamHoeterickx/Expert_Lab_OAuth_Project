@@ -1,7 +1,5 @@
 const crypto = require('crypto');
 
-const pendingAuthCodes = {};
-
 const createCryptoString = (length, type) => {
     return crypto.randomBytes(length).toString(type);
 }
@@ -30,42 +28,49 @@ const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
 
-const saveAuthCode = (userId, client_id, expiresIn) => {
+const saveAuthCode = async (userId, client_id, tokenCollection) => {
     const authCode = generateAuthCode();
 
     //expires_at gaat door Date.now - expiresIn in het verleden liggen waardoor deze verwijderd wordt
 
-    pendingAuthCodes[authCode] = {
+    await tokenCollection.createIndex(
+        {createdAt: 1},
+        {expireAfterSeconds: 60 * 5}
+    );
+
+    const result = await tokenCollection.insertOne({
         userId: userId,
         client_id: client_id,
-        expires_at: Date.now() - expiresIn
-    };
+        createdAt: new Date()
+    });
+
+    console.log(result);
 
     return authCode
 }
 
-const getAuthCode = (authCode) => {
-    const result = pendingAuthCodes[authCode];
+// const getAuthCode = (authCode) => {
+//     const result = pendingAuthCodes[authCode];
 
-    if(!result) return null;
+//     if(!result) return null;
 
-    if(result.expires_at > Date.now()){
-        return result;
-    }else{
-        deleteAuthCode(authCode);
-        return null;
-    }
-}
+//     if(result.expires_at > Date.now()){
+//         return result;
+//     }else{
+//         deleteAuthCode(authCode);
+//         return null;
+//     }
+// }
 
-const deleteAuthCode = (authCode) => {
-    delete pendingAuthCodes[authCode];
-}
+// const deleteAuthCode = (authCode) => {
+//     delete pendingAuthCodes[authCode];
+// }
 
 module.exports = {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
     saveAuthCode,
-    getAuthCode,
-    deleteAuthCode
+    // getAuthCode,
+    // deleteAuthCode
 }

@@ -15,7 +15,8 @@ const DB_NAME = "OAuth_provider_expert_lab_2025";
 const database = client.db(DB_NAME);
 
 const userCollection = database.collection('users');
-const OAuthClientCollection = database.collection('OAuth')
+const OAuthClientCollection = database.collection('OAuth');
+const tokenCollection = database.collection('tokens');
 
 //Setup session
 //Resave false --> doesn't resave when session isnt changed
@@ -39,7 +40,7 @@ app.use(cors());
 app.use(express.json());
 
 const userRoutes = require('./users/route')(userCollection);
-const authRoutes = require('./oauth/route')(OAuthClientCollection);
+const authRoutes = require('./oauth/route')(OAuthClientCollection, tokenCollection);
 
 app.use('/api', userRoutes);
 app.use('/api/oauth', authRoutes);

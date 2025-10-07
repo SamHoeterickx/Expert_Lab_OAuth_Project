@@ -3,11 +3,11 @@ const {
     createNewOAuthClient,
     findClientByClientid,
     saveAuthCode,
-    getAuthCode,
-    deleteAuthCode,
+    // getAuthCode,
+    // deleteAuthCode,
 } = require('./model');
 
-const authorize = async(req, res, collection) => {
+const authorize = async(req, res, collection, tokenCollection) => {
     try{
 
         //State wordt in frontend gegenereerd
@@ -44,7 +44,7 @@ const authorize = async(req, res, collection) => {
     }
 }
 
-const authConsent = async (req, res, collection) => {
+const authConsent = async (req, res, collection, tokenCollection) => {
     try{
 
         const {client_id, userId, redirect_uri, state, approved } = req.body
@@ -69,7 +69,7 @@ const authConsent = async (req, res, collection) => {
             res.redirect(redirectURL);
         }
 
-        const authCode = saveAuthCode(userId, client_id);
+        const authCode = saveAuthCode(userId, client_id, tokenCollection);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
         return res.redirect(redirectURL);
@@ -111,7 +111,7 @@ const registerClient = async(req, res, collection) => {
     }
 }
 
-const token = async (req, res, collection) => {
+const token = async (req, res, collection, tokenCollection) => {
     try{
 
         const { grant_type, code, client_id, client_secret, redirect_uri } = req.body;
@@ -125,7 +125,7 @@ const token = async (req, res, collection) => {
             return res.status(401).send({
                 status: 401,
                 message: 'Invalid client credentials'
-            })
+            });
         }
 
         res.status(200).send({
