@@ -2,12 +2,16 @@ const {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
+    findClientByClientIdAndSecret,
     saveAuthCode,
-    getAuthCode,
-    deleteAuthCode,
+    checkTokenExists,
+    generateAccessToken,
+    saveAccessToken
+    // getAuthCode,
+    // deleteAuthCode,
 } = require('./model');
 
-const authorize = async(req, res, collection) => {
+const authorize = async(req, res, collection, tokenCollection) => {
     try{
 
         //State wordt in frontend gegenereerd
@@ -44,7 +48,7 @@ const authorize = async(req, res, collection) => {
     }
 }
 
-const authConsent = async (req, res, collection) => {
+const authConsent = async (req, res, collection, tokenCollection) => {
     try{
 
         const {client_id, userId, redirect_uri, state, approved } = req.body
@@ -69,7 +73,7 @@ const authConsent = async (req, res, collection) => {
             res.redirect(redirectURL);
         }
 
-        const authCode = saveAuthCode(userId, client_id);
+        const authCode = saveAuthCode(userId, client_id, tokenCollection);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
         return res.redirect(redirectURL);
@@ -120,8 +124,78 @@ const registerClient = async(req, res, collection) => {
     }
 }
 
+const token = async (req, res, collection, authTokenCollection, accessTokenColletion) => {
+    try{
+
+        const {grant_type, code, client_id, client_secret, redirect_uri} = req.body;
+
+        if (grant_type !== 'authorization_code') {
+            return res.status(401).send({
+                status: 401,
+                message: 'Invalid grant type'
+            })
+        }
+
+        const client = await findClientByClientIdAndSecret(collection, client_id, client_secret);
+
+        if(!client){
+            return res.status(401).send({
+                status: 401,
+                message: 'Invalid client credentials'
+            });
+        }
+
+        const tokenExist = await checkTokenExists(code, authTokenCollection);
+
+        if(!tokenExist){
+            return res.status(498).send({
+                status: 498,
+                message: 'Invalid token'
+            })
+        }
+
+        if(redirect_uri !== client.redirect_uri){
+            return res.status(400).send({
+                status: 400,
+                message: "Redirect uri doesn't match"
+            })
+        }
+
+        const accessToken = generateAccessToken();
+
+        const result = await saveAccessToken(accessTokenColletion, tokenExist.userId, accessToken, client_id);
+    
+        if(!result){
+            return res.status(500).send({
+                status: 500,
+                message: 'Something went wrong, please try again'
+            })
+        }
+
+        console.log(result)
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Token generated succesfully',
+            data: {
+                access_token: data.accessToken,
+                token_type: data.token_type,
+                expires_in: data.expires_at
+            }
+        })
+
+    }catch(error){
+        console.error('Token error:', error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
     registerClient,
     authorize,
     authConsent,
+    token
 }

@@ -1,7 +1,5 @@
 const crypto = require('crypto');
 
-const pendingAuthCodes = {};
-
 const createCryptoString = (length, type) => {
     return crypto.randomBytes(length).toString(type);
 }
@@ -26,23 +24,32 @@ const findClientByClientid = async (collection, client_id) => {
     return result;
 }
 
+const findClientByClientIdAndSecret = async (collection, client_id, client_secret) => {
+    const result = await collection.findOne({
+        client_id: client_id,
+        client_secret: client_secret
+    });
+
+    return result;
+}
+
 const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
 
-const saveAuthCode = (userId, client_id, expiresIn) => {
+const saveAuthCode = async (userId, client_id, tokenCollection) => {
     const authCode = generateAuthCode();
 
-    //expires_at gaat door Date.now - expiresIn in het verleden liggen waardoor deze verwijderd wordt
-
-    pendingAuthCodes[authCode] = {
+    const result = await tokenCollection.insertOne({
+        token: authCode,
         userId: userId,
         client_id: client_id,
-        expires_at: Date.now() - expiresIn
-    };
+        createdAt: new Date()
+    });
 
     return authCode
 }
+
 
 const getAuthCode = (authCode) => {
     const result = pendingAuthCodes[authCode];
@@ -57,15 +64,47 @@ const getAuthCode = (authCode) => {
     }
 }
 
-const deleteAuthCode = (authCode) => {
-    delete pendingAuthCodes[authCode];
+const checkTokenExists = async (authToken, tokenCollection) => {
+    const result = await tokenCollection.findOne({ token: authToken});
+
+    return result
 }
+
+const generateAccessToken = () => {
+    return crypto.randomBytes(64).toString('hex');
+}
+
+const saveAccessToken  = async (accesTokenCollection, userId, accessToken, client_id) => {
+
+    const result = await accesTokenCollection.insertOne({
+        access_token: accessToken,
+        client_id: client_id,
+        userId: userId,
+        token_type: "Bearer",
+        expires_at: 60 * 60,
+        createdAt: new Date()
+    })
+
+    return data = {
+        accessToken,
+        token_type: 'Bearer',
+        expires_at:  60 * 60
+    }
+}
+
+// const deleteAuthCode = (authCode) => {
+//     delete pendingAuthCodes[authCode];
+// }
 
 module.exports = {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
+    findClientByClientIdAndSecret,
     saveAuthCode,
-    getAuthCode,
-    deleteAuthCode
+    checkTokenExists,
+    generateAccessToken,
+    saveAccessToken
+    // getAuthCode,
+    // deleteAuthCode
 }
