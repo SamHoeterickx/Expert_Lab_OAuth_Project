@@ -49,18 +49,24 @@ const saveAuthCode = async (userId, client_id, tokenCollection) => {
     return authCode
 }
 
-// const getAuthCode = (authCode) => {
-//     const result = pendingAuthCodes[authCode];
+const getAuthCode = (authCode) => {
+    const result = pendingAuthCodes[authCode];
 
-//     if(!result) return null;
+    if(!result) return null;
 
-//     if(result.expires_at > Date.now()){
-//         return result;
-//     }else{
-//         deleteAuthCode(authCode);
-//         return null;
-//     }
-// }
+    if(result.expires_at > Date.now()){
+        return result;
+    }else{
+        deleteAuthCode(authCode);
+        return null;
+    }
+}
+
+const checkTokenExists = async (authToken, tokenCollection) => {
+    const result = await tokenCollection.findOne({ authToken: authToken});
+
+    return result
+}
 
 // const deleteAuthCode = (authCode) => {
 //     delete pendingAuthCodes[authCode];
@@ -71,6 +77,7 @@ module.exports = {
     createNewOAuthClient,
     findClientByClientid,
     saveAuthCode,
+    checkTokenExists
     // getAuthCode,
     // deleteAuthCode
 }

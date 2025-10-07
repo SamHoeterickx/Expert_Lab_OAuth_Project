@@ -3,6 +3,7 @@ const {
     createNewOAuthClient,
     findClientByClientid,
     saveAuthCode,
+    checkTokenExists
     // getAuthCode,
     // deleteAuthCode,
 } = require('./model');
@@ -128,7 +129,17 @@ const token = async (req, res, collection, tokenCollection) => {
             });
         }
 
-        res.status(200).send({
+        const tokenExist = await checkTokenExists(code, tokenCollection);
+        if(!tokenExist){
+            return res.status(498).send({
+                status: 498,
+                message: 'Invalid token'
+            })
+        }
+
+
+
+        return res.status(200).send({
             status: 200,
             message: 'Token generated succesfully'
         })
