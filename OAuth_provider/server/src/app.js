@@ -48,8 +48,10 @@ app.use(express.json());
 const userRoutes = require('./users/route')(userCollection, accessTokenCollection, OAuthClientCollection);
 const authRoutes = require('./oauth/route')(OAuthClientCollection, authTokenCollection, accessTokenCollection);
 
-app.use('/api', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/oauth', authRoutes);
+
+
 
 const startServer = async () => {
     try {
@@ -57,20 +59,19 @@ const startServer = async () => {
         console.log('Connected successfully to MongoDB server');
 
         try {
+            
             await authTokenCollection.dropIndex('createdAt_1');
             console.log('Dropped old auth token index');
-        } catch (e) {
+        } catch (error) {
             console.log('No old auth token index to drop');
         }
 
         try {
             await accessTokenCollection.dropIndex('createdAt_1');
             console.log('Dropped old access token index');
-        } catch (e) {
+        } catch (error) {
             console.log('No old access token index to drop');
         }
-
-        console.log('Auth code TTL index created');
 
         await authTokenCollection.createIndex(
             { createdAt: 1 },
@@ -93,8 +94,8 @@ const startServer = async () => {
         app.listen(port, () => {
             console.log(`Example of app is listening on port: ${port}`);
         });
-    } catch (err) {
-        console.error('Failed to connect to MongoDB', err);
+    } catch (error) {
+        console.error('Failed to connect to MongoDB', error);
         process.exit(1);
     }
 };
