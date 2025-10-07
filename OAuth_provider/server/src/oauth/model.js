@@ -40,13 +40,6 @@ const generateAuthCode = () => {
 const saveAuthCode = async (userId, client_id, tokenCollection) => {
     const authCode = generateAuthCode();
 
-    //expires_at gaat door Date.now - expiresIn in het verleden liggen waardoor deze verwijderd wordt
-
-    await tokenCollection.createIndex(
-        {createdAt: 2},
-        {expireAfterSeconds: 60 * 5}
-    );
-
     const result = await tokenCollection.insertOne({
         token: authCode,
         userId: userId,
@@ -82,7 +75,21 @@ const generateAccessToken = () => {
 }
 
 const saveAccessToken  = async (accesTokenCollection, userId, accessToken, client_id) => {
-    console.log("userId", userId);
+
+    const result = await accesTokenCollection.insertOne({
+        access_token: accessToken,
+        client_id: client_id,
+        userId: userId,
+        token_type: "Bearer",
+        expires_at: 60 * 60,
+        createdAt: new Date()
+    })
+
+    return data = {
+        accessToken,
+        token_type: 'Bearer',
+        expires_at:  60 * 60
+    }
 }
 
 // const deleteAuthCode = (authCode) => {

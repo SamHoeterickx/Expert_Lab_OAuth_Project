@@ -129,7 +129,7 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
 
         const client = await findClientByClientIdAndSecret(collection, client_id, client_secret);
 
-        if(client == undefined){
+        if(!client){
             return res.status(401).send({
                 status: 401,
                 message: 'Invalid client credentials'
@@ -137,8 +137,6 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
         }
 
         const tokenExist = await checkTokenExists(code, authTokenCollection);
-
-        console.log(tokenExist);
 
         if(!tokenExist){
             return res.status(498).send({
@@ -156,13 +154,25 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
 
         const accessToken = generateAccessToken();
 
-        const result = await saveAccessToken(accessTokenColletion, tokenExist.userId, accessToken, client_id )
+        const result = await saveAccessToken(accessTokenColletion, tokenExist.userId, accessToken, client_id);
+    
+        if(!result){
+            return res.status(500).send({
+                status: 500,
+                message: 'Something went wrong, please try again'
+            })
+        }
 
-
+        console.log(result)
 
         return res.status(200).send({
             status: 200,
-            message: 'Token generated succesfully'
+            message: 'Token generated succesfully',
+            data: {
+                access_token: data.accessToken,
+                token_type: data.token_type,
+                expires_in: data.expires_at
+            }
         })
 
     }catch(error){

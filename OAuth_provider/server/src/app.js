@@ -55,6 +55,41 @@ const startServer = async () => {
     try {
         await client.connect();
         console.log('Connected successfully to MongoDB server');
+
+        try {
+            await authTokenCollection.dropIndex('createdAt_1');
+            console.log('Dropped old auth token index');
+        } catch (e) {
+            console.log('No old auth token index to drop');
+        }
+
+        try {
+            await accessTokenCollection.dropIndex('createdAt_1');
+            console.log('Dropped old access token index');
+        } catch (e) {
+            console.log('No old access token index to drop');
+        }
+
+        console.log('Auth code TTL index created');
+
+        await authTokenCollection.createIndex(
+            { createdAt: 1 },
+            { 
+                expireAfterSeconds: 300, 
+                name: 'auth_code_ttl' 
+            }
+        );
+        console.log('Auth code TTL index created');
+        
+        await accessTokenCollection.createIndex(
+            { createdAt: 1 },  
+            { 
+                expireAfterSeconds: 3600,
+                name: 'access_token_ttl' 
+            }
+        );
+        console.log('Access token TTL index created');
+
         app.listen(port, () => {
             console.log(`Example of app is listening on port: ${port}`);
         });
