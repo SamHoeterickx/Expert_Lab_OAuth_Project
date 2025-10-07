@@ -64,8 +64,8 @@ const getAuthCode = (authCode) => {
     }
 }
 
-const checkTokenExists = async (authToken, tokenCollection) => {
-    const result = await tokenCollection.findOne({ token: authToken});
+const checkTokenExists = async (token, collection) => {
+    const result = await collection.findOne({ token: token});
 
     return result
 }

@@ -5,6 +5,10 @@ const {
     findUserIdWithToken
 } = require('./model.js');
 
+const {
+    checkTokenExists
+} = require('../oauth/model.js')
+
 const register = async(req, res, userCollection) => {
 
     try{
@@ -101,6 +105,15 @@ const login = async(req, res, userCollection) => {
 
 const getUserInfo = async(req, res, userCollection, accessTokenCollection) => {
     const accessToken = req.headers.authorization;
+
+    const validToken = checkTokenExists(accessToken, accessTokenCollection);
+
+    if(!validToken){
+        return res.status(401).send({
+            status: 401,
+            message: 'Invalid token error'
+        });
+    }
 
     const clientId = await findUserIdWithToken(accessToken, accessTokenCollection);
 
