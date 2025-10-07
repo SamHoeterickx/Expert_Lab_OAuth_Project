@@ -114,6 +114,20 @@ const registerClient = async(req, res, collection) => {
 const token = async (req, res, collection) => {
     try{
 
+        const { grant_type, code, client_id, client_secret, redirect_uri } = req.body;
+
+        const client = await collection.findOne({
+            client_id: client_id,
+            client_secret: client_secret
+        });
+
+        if(!client){
+            return res.status(401).send({
+                status: 401,
+                message: 'Invalid client credentials'
+            })
+        }
+
         res.status(200).send({
             status: 200,
             message: 'Token generated succesfully'
