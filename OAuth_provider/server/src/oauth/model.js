@@ -24,6 +24,15 @@ const findClientByClientid = async (collection, client_id) => {
     return result;
 }
 
+const findClientByClientIdAndSecret = async (collection, client_id, client_secret) => {
+    const result = await collection.findOne({
+        client_id: client_id,
+        client_secret: client_secret
+    });
+
+    return result;
+}
+
 const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
@@ -76,6 +85,7 @@ module.exports = {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
+    findClientByClientIdAndSecret,
     saveAuthCode,
     checkTokenExists
     // getAuthCode,

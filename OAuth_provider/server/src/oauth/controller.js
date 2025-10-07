@@ -2,6 +2,7 @@ const {
     createCryptoString,
     createNewOAuthClient,
     findClientByClientid,
+    findClientByClientIdAndSecret,
     saveAuthCode,
     checkTokenExists
     // getAuthCode,
@@ -117,10 +118,7 @@ const token = async (req, res, collection, tokenCollection) => {
 
         const { grant_type, code, client_id, client_secret, redirect_uri } = req.body;
 
-        const client = await collection.findOne({
-            client_id: client_id,
-            client_secret: client_secret
-        });
+        const client = findClientByClientIdAndSecret(collection, client_id, client_secret);
 
         if(!client){
             return res.status(401).send({
