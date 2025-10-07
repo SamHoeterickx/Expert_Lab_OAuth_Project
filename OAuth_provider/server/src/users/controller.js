@@ -76,8 +76,6 @@ const login = async(req, res, userCollection) => {
             })
         }
 
-        console.log(user)
-
         const match = await verifyPassword(password, user.password);
 
         if(!match){
@@ -133,9 +131,7 @@ const getUserInfo = async(req, res, userCollection, accessTokenCollection, OAuth
     }
 
     const userInfo = filterUserInfoByScope(user, clientScopes);
-
-    console.log(userInfo);
-
+    
     return res.status(200).send({
         status: 200,
         message: 'Succes',

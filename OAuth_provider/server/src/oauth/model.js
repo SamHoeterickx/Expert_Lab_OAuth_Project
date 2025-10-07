@@ -50,20 +50,6 @@ const saveAuthCode = async (userId, client_id, tokenCollection) => {
     return authCode
 }
 
-
-const getAuthCode = (authCode) => {
-    const result = pendingAuthCodes[authCode];
-
-    if(!result) return null;
-
-    if(result.expires_at > Date.now()){
-        return result;
-    }else{
-        deleteAuthCode(authCode);
-        return null;
-    }
-}
-
 const checkTokenExists = async (token, collection) => {
     const result = await collection.findOne({ token: token});
 
@@ -92,9 +78,6 @@ const saveAccessToken  = async (accesTokenCollection, userId, accessToken, clien
     }
 }
 
-// const deleteAuthCode = (authCode) => {
-//     delete pendingAuthCodes[authCode];
-// }
 
 module.exports = {
     createCryptoString,
@@ -105,6 +88,4 @@ module.exports = {
     checkTokenExists,
     generateAccessToken,
     saveAccessToken
-    // getAuthCode,
-    // deleteAuthCode
 }

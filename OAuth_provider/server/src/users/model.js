@@ -34,14 +34,16 @@ const getTokenInfo = async (accessToken, accessTokenCollection) => {
 }
 
 const findScopeWithClientId = async (client_id, OAuthClientCollection) => {
-    const result = await OAuthClientCollection.findOne({client_id: client_id});
+    const result = await OAuthClientCollection.findOne(
+        {client_id: client_id},
+        {projection: { scope: 1 , _id: 0} }
+    );
 
     return result.scope
 }
 
 const filterUserInfoByScope = (user, clientScopes) => {
     const userInfo = {};
-    // console.log(user);
 
     if(clientScopes.includes('openid') || clientScopes.includes('profiel')){
         userInfo.sub = user._id;
