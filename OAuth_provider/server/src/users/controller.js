@@ -2,7 +2,10 @@ const {
     createUser, 
     findUserByEmail, 
     verifyPassword,
-    findUserIdWithToken
+    getTokenInfo,
+    findScopeWithClientId,
+    findUserById,
+    filterUserInfoByScope
 } = require('./model.js');
 
 const {
@@ -103,25 +106,40 @@ const login = async(req, res, userCollection) => {
     }
 }
 
-const getUserInfo = async(req, res, userCollection, accessTokenCollection) => {
-    const accessToken = req.headers.authorization;
+const getUserInfo = async(req, res, userCollection, accessTokenCollection, OAuthClientCollection) => {
+    const accessToken = req.headers.authorization?.replace('Bearer ', '');
 
     const validToken = checkTokenExists(accessToken, accessTokenCollection);
-
     if(!validToken){
         return res.status(401).send({
             status: 401,
-            message: 'Invalid token error'
+            message: 'Access token is expired or invalid'
         });
     }
 
-    const clientId = await findUserIdWithToken(accessToken, accessTokenCollection);
+    const tokenInfo = await getTokenInfo(accessToken, accessTokenCollection);
+    const client_id = tokenInfo.client_id;
+    const userId = tokenInfo.userId;
 
-    console.log(clientId);
+    const clientScopes  = await findScopeWithClientId(client_id, OAuthClientCollection);
+    const user = await findUserById(userId, userCollection);
+    console.log('user', user)
+
+    if(!user){
+        return res.status(404).send({
+            status: 404,
+            message: 'User not found'
+        });
+    }
+
+    const userInfo = filterUserInfoByScope(user, clientScopes);
+
+    console.log(userInfo);
 
     return res.status(200).send({
         status: 200,
-        message: 'Succes'
+        message: 'Succes',
+        data: userInfo
     })
 }
 
