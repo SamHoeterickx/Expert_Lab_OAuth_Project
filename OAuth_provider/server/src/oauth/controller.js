@@ -89,6 +89,15 @@ const registerClient = async(req, res, collection) => {
         const { client_name, redirect_uri, scope, client_uri, owner_email } = req.body
         //Geen check voor user want wil dat deze route pas zichtbaar is als je ingelogd bent
 
+        const result = await collection.findOne({owner_email: owner_email});
+
+        if(result){
+            return res.status(409).send({
+                status: 409,
+                message: 'This service is already registered to your account'
+            })
+        }
+
         const client_id = createCryptoString(16, 'hex');
         const client_secret = createCryptoString(32, 'hex');
 
