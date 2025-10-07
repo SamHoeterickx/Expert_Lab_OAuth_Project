@@ -37,6 +37,10 @@ const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
 
+const generateAccesToken = () => {
+    return crypto.randomBytes(64).toString('hex');
+}
+
 const saveAuthCode = async (userId, client_id, tokenCollection) => {
     const authCode = generateAuthCode();
 
@@ -83,6 +87,7 @@ const checkTokenExists = async (authToken, tokenCollection) => {
 
 module.exports = {
     createCryptoString,
+    generateAccesToken,
     createNewOAuthClient,
     findClientByClientid,
     findClientByClientIdAndSecret,

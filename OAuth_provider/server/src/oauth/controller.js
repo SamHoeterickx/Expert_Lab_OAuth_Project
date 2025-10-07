@@ -1,5 +1,6 @@
 const { 
     createCryptoString,
+    generateAccesToken,
     createNewOAuthClient,
     findClientByClientid,
     findClientByClientIdAndSecret,
@@ -134,6 +135,15 @@ const token = async (req, res, collection, tokenCollection) => {
                 message: 'Invalid token'
             })
         }
+
+        if(redirect_uri !== client.redirect_uri){
+            return res.status(400).send({
+                status: 400,
+                message: "Redirect uri doesn't match"
+            })
+        }
+
+        const accesToken = generateAccesToken();
 
 
 
