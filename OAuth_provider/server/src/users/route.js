@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const { register, login } = require('./controller');
+const { register, login, getUserInfo } = require('./controller');
 
-module.exports = (collection) => {
-    router.post('/register', (req, res) => register(req, res, collection));
-    router.post('/login', (req, res) => login(req, res, collection));
+module.exports = (userCollection, accessTokenCollection) => {
+    router.get('/userinfo', (req, res) => getUserInfo(req, res, userCollection, accessTokenCollection));
+    router.post('/register', (req, res) => register(req, res, userCollection));
+    router.post('/login', (req, res) => login(req, res, userCollection));
 
     return router
 }

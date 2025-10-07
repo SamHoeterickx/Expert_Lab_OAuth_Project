@@ -20,8 +20,17 @@ const verifyPassword = async (password, hashedpassword) => {
     return await bcrypt.compare(password, hashedpassword);
 }
 
+const findUserIdWithToken = async (accessToken, accessTokenCollection) => {
+    const result = await accessTokenCollection.findOne({
+        access_token: accessToken
+    });
+
+    return result.userId
+}
+
 module.exports = {
     createUser,
     findUserByEmail,
-    verifyPassword
+    verifyPassword,
+    findUserIdWithToken
 }

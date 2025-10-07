@@ -1,10 +1,15 @@
-const { createUser, findUserByEmail, verifyPassword} = require('./model.js');
+const { 
+    createUser, 
+    findUserByEmail, 
+    verifyPassword,
+    findUserIdWithToken
+} = require('./model.js');
 
-const register = async(req, res, collection) => {
+const register = async(req, res, userCollection) => {
 
     try{
         const { name, email, password, repeatPassword } = req.body;
-        const existingUser = await findUserByEmail(collection, req.body.email);
+        const existingUser = await findUserByEmail(userCollection, req.body.email);
 
         if(!name, !email, !password, !repeatPassword){
             return res.status(422).send({
@@ -27,7 +32,7 @@ const register = async(req, res, collection) => {
             })            
         }
 
-        const newUser = await createUser(collection, {name, email, password, repeatPassword});
+        const newUser = await createUser(userCollection, {name, email, password, repeatPassword});
         if(newUser) {
             return res.status(201).send({
                 status: 201,
@@ -44,11 +49,11 @@ const register = async(req, res, collection) => {
     }
 }
 
-const login = async(req, res, collection) => {
+const login = async(req, res, userCollection) => {
     try{
 
         const {email, password} = req.body;
-        const user = await findUserByEmail(collection, email);
+        const user = await findUserByEmail(userCollection, email);
 
         if(!email, !password){
             res.status(422).send({
@@ -94,7 +99,21 @@ const login = async(req, res, collection) => {
     }
 }
 
+const getUserInfo = async(req, res, userCollection, accessTokenCollection) => {
+    const accessToken = req.headers.authorization;
+
+    const clientId = await findUserIdWithToken(accessToken, accessTokenCollection);
+
+    console.log(clientId);
+
+    return res.status(200).send({
+        status: 200,
+        message: 'Succes'
+    })
+}
+
 module.exports = {
     register,
-    login
+    login,
+    getUserInfo
 }
