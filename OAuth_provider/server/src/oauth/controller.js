@@ -111,6 +111,23 @@ const registerClient = async(req, res, collection) => {
     }
 }
 
+const token = async (req, res) => {
+    try{
+
+        res.status(200).send({
+            status: 200,
+            message: 'Token generated succesfully'
+        })
+
+    }catch(error){
+        console.error('Token error:', error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
     registerClient,
     authorize,
