@@ -37,30 +37,26 @@ const generateAuthCode = () => {
     return crypto.randomBytes(10).toString('hex');
 }
 
-const generateAccesToken = () => {
-    return crypto.randomBytes(64).toString('hex');
-}
-
 const saveAuthCode = async (userId, client_id, tokenCollection) => {
     const authCode = generateAuthCode();
 
     //expires_at gaat door Date.now - expiresIn in het verleden liggen waardoor deze verwijderd wordt
 
     await tokenCollection.createIndex(
-        {createdAt: 1},
+        {createdAt: 2},
         {expireAfterSeconds: 60 * 5}
     );
 
     const result = await tokenCollection.insertOne({
+        token: authCode,
         userId: userId,
         client_id: client_id,
         createdAt: new Date()
     });
 
-    console.log(result);
-
     return authCode
 }
+
 
 const getAuthCode = (authCode) => {
     const result = pendingAuthCodes[authCode];
@@ -76,9 +72,17 @@ const getAuthCode = (authCode) => {
 }
 
 const checkTokenExists = async (authToken, tokenCollection) => {
-    const result = await tokenCollection.findOne({ authToken: authToken});
+    const result = await tokenCollection.findOne({ token: authToken});
 
     return result
+}
+
+const generateAccessToken = () => {
+    return crypto.randomBytes(64).toString('hex');
+}
+
+const saveAccessToken  = async (accesTokenCollection, userId, accessToken, client_id) => {
+    console.log("userId", userId);
 }
 
 // const deleteAuthCode = (authCode) => {
@@ -87,12 +91,13 @@ const checkTokenExists = async (authToken, tokenCollection) => {
 
 module.exports = {
     createCryptoString,
-    generateAccesToken,
     createNewOAuthClient,
     findClientByClientid,
     findClientByClientIdAndSecret,
     saveAuthCode,
-    checkTokenExists
+    checkTokenExists,
+    generateAccessToken,
+    saveAccessToken
     // getAuthCode,
     // deleteAuthCode
 }

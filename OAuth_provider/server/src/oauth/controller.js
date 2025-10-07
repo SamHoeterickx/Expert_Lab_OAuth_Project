@@ -1,11 +1,12 @@
 const { 
     createCryptoString,
-    generateAccesToken,
     createNewOAuthClient,
     findClientByClientid,
     findClientByClientIdAndSecret,
     saveAuthCode,
-    checkTokenExists
+    checkTokenExists,
+    generateAccessToken,
+    saveAccessToken
     // getAuthCode,
     // deleteAuthCode,
 } = require('./model');
@@ -114,21 +115,31 @@ const registerClient = async(req, res, collection) => {
     }
 }
 
-const token = async (req, res, collection, tokenCollection) => {
+const token = async (req, res, collection, authTokenCollection, accessTokenColletion) => {
     try{
 
-        const { grant_type, code, client_id, client_secret, redirect_uri } = req.body;
+        const {grant_type, code, client_id, client_secret, redirect_uri} = req.body;
 
-        const client = findClientByClientIdAndSecret(collection, client_id, client_secret);
+        if (grant_type !== 'authorization_code') {
+            return res.status(401).send({
+                status: 401,
+                message: 'Invalid grant type'
+            })
+        }
 
-        if(!client){
+        const client = await findClientByClientIdAndSecret(collection, client_id, client_secret);
+
+        if(client == undefined){
             return res.status(401).send({
                 status: 401,
                 message: 'Invalid client credentials'
             });
         }
 
-        const tokenExist = await checkTokenExists(code, tokenCollection);
+        const tokenExist = await checkTokenExists(code, authTokenCollection);
+
+        console.log(tokenExist);
+
         if(!tokenExist){
             return res.status(498).send({
                 status: 498,
@@ -143,7 +154,9 @@ const token = async (req, res, collection, tokenCollection) => {
             })
         }
 
-        const accesToken = generateAccesToken();
+        const accessToken = generateAccessToken();
+
+        const result = await saveAccessToken(accessTokenColletion, tokenExist.userId, accessToken, client_id )
 
 
 

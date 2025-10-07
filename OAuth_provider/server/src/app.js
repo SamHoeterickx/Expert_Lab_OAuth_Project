@@ -16,7 +16,8 @@ const database = client.db(DB_NAME);
 
 const userCollection = database.collection('users');
 const OAuthClientCollection = database.collection('OAuth');
-const tokenCollection = database.collection('tokens');
+const authTokenCollection = database.collection('tokens');
+const accessTokenCollection = database.collection('accessTokens');
 
 //Setup session
 //Resave false --> doesn't resave when session isnt changed
@@ -36,11 +37,16 @@ app.use(session({
     }
 }));
 
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 const userRoutes = require('./users/route')(userCollection);
-const authRoutes = require('./oauth/route')(OAuthClientCollection, tokenCollection);
+const authRoutes = require('./oauth/route')(OAuthClientCollection, authTokenCollection, accessTokenCollection);
 
 app.use('/api', userRoutes);
 app.use('/api/oauth', authRoutes);
