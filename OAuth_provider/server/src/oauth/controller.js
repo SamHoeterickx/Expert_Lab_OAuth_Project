@@ -6,7 +6,8 @@ const {
     saveAuthCode,
     checkTokenExists,
     generateAccessToken,
-    saveAccessToken
+    saveAccessToken,
+    getClientInfoFromClientId
     // getAuthCode,
     // deleteAuthCode,
 } = require('./model');
@@ -198,8 +199,40 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
     }
 }
 
+const getClientInfo = async (req, res, OAuthClientCollection) => {
+    try{
+
+        const { client_id } = req.query;
+
+        const client = await getClientInfoFromClientId(OAuthClientCollection, client_id);
+
+        if(!client){
+            return res.status(404).send({
+                status: 404,
+                message: 'Client not found'
+            })
+        }
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Client found',
+            data: {
+                client
+            }
+        })
+
+    }catch(error){
+        console.error('Client info error:', error)
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
     registerClient,
+    getClientInfo,
     authorize,
     authConsent,
     token

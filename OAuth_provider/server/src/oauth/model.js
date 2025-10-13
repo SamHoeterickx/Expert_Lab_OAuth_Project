@@ -78,6 +78,14 @@ const saveAccessToken  = async (accesTokenCollection, userId, accessToken, clien
     }
 }
 
+const getClientInfoFromClientId = async (OAuthClientCollection, client_id) => {
+    const result = await OAuthClientCollection.findOne({client_id: client_id});
+    return {
+        client_name: result.client_name,
+        scope: result.scope
+    }
+}
+
 
 module.exports = {
     createCryptoString,
@@ -87,5 +95,6 @@ module.exports = {
     saveAuthCode,
     checkTokenExists,
     generateAccessToken,
-    saveAccessToken
+    saveAccessToken,
+    getClientInfoFromClientId
 }

@@ -2,10 +2,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { registerClient, authorize, authConsent, token } = require('./controller');
+const { registerClient, getClientInfo, authorize, authConsent, token } = require('./controller');
 
-module.exports = (collection, authTokenCollection, accessTokenColletion) => {
+module.exports = (collection, authTokenCollection, accessTokenColletion, OAuthClientCollection) => {
     router.get('/authorize', (req, res) => authorize(req, res, collection));
+    router.get('/get-client-info', (req, res) => getClientInfo(req, res, OAuthClientCollection));
     router.post('/consent', (req, res) => authConsent(req, res, collection, authTokenCollection));
     router.post('/token', (req, res) => token(req, res, collection, authTokenCollection, accessTokenColletion));
     router.post('/register_client', (req, res) => registerClient(req, res, collection));
