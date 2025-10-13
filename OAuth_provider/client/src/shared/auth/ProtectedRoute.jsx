@@ -8,12 +8,13 @@ export const ProtectedRoute = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        fetch("url", {
+        fetch("http://localhost:3000/api/check-session", {
             credentials: "include"
         })
-         .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
             setIsLoggedIn(data.loggedIn);
+            setIsLoading(false);
         })
         .catch(() => setIsLoggedIn(false))
         .finally(() => setIsLoading(false));

@@ -1,15 +1,18 @@
 import { useRef, useState } from "react";
 import { clsx } from "clsx";
+import { Link, useNavigate } from "react-router-dom";
+
 
 //Styles
-import styles from "./login.module.scss";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import styles from "./register.module.scss";
 
-export const Login = () => {
+export const Register = () => {
 
-    const [loginForm, setLoginForm] = useState({
+    const [registerForm, setRegisterForm] = useState({
+        name: "",
         email: "",
-        password: ""
+        password: "",
+        repeatPassword: ""
     });
     const [statusCode, setStatusCode] = useState(undefined);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -19,25 +22,27 @@ export const Login = () => {
     const form = useRef();
 
     const handleInputfield = (field, value) => {
-        setLoginForm(prev => (
+        setRegisterForm(prev => (
             {
                 ...prev,
                 [field]: value
             }
         ))
     }
-    const handleLogin = (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
         setIsLoading(true);
 
         if (!form.current) return
 
-        fetch('http://localhost:3000/api/users/login', {
+        fetch('http://localhost:3000/api/users/register', {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify({
-                email: loginForm.email,
-                password: loginForm.password
+                name: registerForm.name,
+                email: registerForm.email,
+                password: registerForm.password,
+                repeatPassword: registerForm.repeatPassword
             }),
             headers: {
                 'Content-type': "application/json"
@@ -48,8 +53,8 @@ export const Login = () => {
             setIsLoading(false);
             console.log(data);
 
-            if(data.status === 200){
-                setStatusCode(200);
+            if(data.status === 201){
+                setStatusCode(201);
                 setErrorMessage(false);
                 nav('/');
                 return
@@ -68,30 +73,37 @@ export const Login = () => {
         <>
             {
                 !isLoading && (
-                    <section className={clsx(styles["login-wrapper"])}>
-                        <h2>Login</h2>
+                    <section className={clsx(styles["register-wrapper"])}>
+                        <h2>Register</h2>
                         <form 
-                            className={clsx(styles["login-wrapper--form-wrapper"])}
+                            className={clsx(styles["register-wrapper--form-wrapper"])}
                             ref={ form }
-                            onSubmit={ handleLogin }
+                            onSubmit={ handleRegister }
                         >
-                            <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
+                                <label>Name</label>
+                                <input type="text" name="name" onChange={ e => handleInputfield('name', e.target.value) }  />
+                            </div>
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
                                 <label>Email</label>
                                 <input type="email" name="email" onChange={ e => handleInputfield('email', e.target.value) }  />
                             </div>
-                            <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
-
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
                                 <label>Password</label>
-                                <input type="password" name="email" onChange={ e => handleInputfield('password', e.target.value) }  />
+                                <input type="password" name="password" onChange={ e => handleInputfield('password', e.target.value) }  />
                             </div>
-                            <input type="submit" value="Login" />
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
+                                <label>Repeat Password</label>
+                                <input type="password" name="repeatPassword" onChange={ e => handleInputfield('repeatPassword', e.target.value) }  />
+                            </div>
+                            <input type="submit" value="Register" />
                             {
                                 statusCode !== 201 && errorMessage !== false && (
                                     <span>{statusCode} - {errorMessage}</span>
                                 ) 
                             }
                         </form> 
-                        <Link to={"/register"} >Register</Link>
+                        <Link to={"/login"} >Login</Link>
                     </section>
                 )
             }

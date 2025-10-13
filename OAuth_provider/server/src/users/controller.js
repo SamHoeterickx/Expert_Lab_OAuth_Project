@@ -18,7 +18,9 @@ const register = async(req, res, userCollection) => {
         const { name, email, password, repeatPassword } = req.body;
         const existingUser = await findUserByEmail(userCollection, req.body.email);
 
-        if(!name, !email, !password, !repeatPassword){
+        console.log(req.body)
+
+        if(!name || !email || !password || !repeatPassword){
             return res.status(422).send({
                 status: 422,
                 message: "Missing register info"
@@ -40,6 +42,19 @@ const register = async(req, res, userCollection) => {
         }
 
         const newUser = await createUser(userCollection, {name, email, password, repeatPassword});
+        const user = await findUserByEmail(userCollection, email);
+
+        if(!user){
+            return res.status(404).send({
+                status: 404,
+                message: "User not found"
+            })
+        }
+
+        const user_id = user._id;
+        const sessionId = user_id.toHexString();
+        req.session.userId = sessionId;
+
         if(newUser) {
             return res.status(201).send({
                 status: 201,
@@ -62,7 +77,7 @@ const login = async(req, res, userCollection) => {
         const {email, password} = req.body;
         const user = await findUserByEmail(userCollection, email);
 
-        if(!email, !password){
+        if(!email || !password){
             res.status(422).send({
                 status: 422,
                 message: "Missing login info"
@@ -85,14 +100,14 @@ const login = async(req, res, userCollection) => {
             })
         }
 
-        req.session.userid = user._id;
-
-        console.log(req.session);
+        const user_id = user._id;
+        const sessionId = user_id.toHexString();
+        req.session.userId = sessionId;
 
         res.status(200).send({
             status: 200,
             message: "Login succesfull",
-            sessionId: req.session.userid
+            sessionId: req.session.userId
         })
 
     } catch(error){
