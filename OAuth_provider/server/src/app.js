@@ -32,19 +32,24 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 app.use(express.json());
 
 const userRoutes = require('./users/route')(userCollection, accessTokenCollection, OAuthClientCollection);
 const authRoutes = require('./oauth/route')(OAuthClientCollection, authTokenCollection, accessTokenCollection);
+const sessionRoutes = require('./session/route');
 
 app.use('/api/users', userRoutes);
 app.use('/api/oauth', authRoutes);
+app.use('/api', sessionRoutes);
 
 
 

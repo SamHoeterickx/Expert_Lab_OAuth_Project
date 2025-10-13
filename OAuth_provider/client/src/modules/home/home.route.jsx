@@ -1,6 +1,13 @@
 import { Home } from "./page/Home.page";
 
+//Auth
+import { ProtectedRoute } from "../../shared/auth/ProtectedRoute";
+
 export const HOME_ROUTE = {
     path: '',
-    element: <Home />
+    element: (
+        <ProtectedRoute>
+            <Home />
+        </ProtectedRoute>
+    )
 }
