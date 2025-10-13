@@ -22,10 +22,88 @@ export const AuthConsent = () => {
             redirect_uri: searchParams.get('redirect_uri'),
             state: searchParams.get('state')
         })
-    }, [searchParams])
+    }, [searchParams]);
 
-    
+    const handleApprove = (e) => {
+        e.preventDefault();
+
+        console.log(urlParams)
+
+        fetch(`http://localhost:3000/api/oauth/consent`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify({
+                client_id: urlParams.client_id,
+                redirect_uri: urlParams.redirect_uri,
+                state: urlParams.state,
+                approved: true
+            }),
+        })
+        .then(response => response.json())
+        .then(data => window.location.href = data.redirectUrl);
+    }
+
+    const handleDeny = (e) => {
+        e.preventDefault();
+
+        console.log(urlParams)
+
+        fetch(`http://localhost:3000/api/oauth/consent`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-type': "application/json"
+            },
+            body: JSON.stringify({
+                client_id: urlParams.client_id,
+                redirect_uri: urlParams.redirect_uri,
+                state: urlParams.state,
+                approved: false
+            }),
+        })
+        .then(response => response.json())
+        .then(data => window.location.href = data.redirectUrl);
+    }
+
+
     return (
-        <h1>Consent access</h1>
+        <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
+            <h1>Toestemming nodig</h1>
+            <p>
+                Wil toegang tot jouw profiel.
+            </p>
+            <div style={{ marginTop: "1.5rem" }}>
+                <button
+                    onClick={handleApprove}
+                    style={{
+                        padding: "0.5rem 1rem",
+                        marginRight: "1rem",
+                        backgroundColor: "#4caf50",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                    }}
+                >
+                    Sta toe
+                </button>
+                <button
+                    onClick={handleDeny}
+                    style={{
+                        padding: "0.5rem 1rem",
+                        backgroundColor: "#f44336",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                    }}
+                >
+                    Weiger
+                </button>
+            </div>
+        </div>
     )
 }

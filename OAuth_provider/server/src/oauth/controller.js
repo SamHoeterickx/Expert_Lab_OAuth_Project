@@ -13,7 +13,7 @@ const {
 
 const authorize = async(req, res, collection, tokenCollection) => {
     try{
-
+        console.log('start authorization')
         //State wordt in frontend gegenereerd
         const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
@@ -24,7 +24,6 @@ const authorize = async(req, res, collection, tokenCollection) => {
 
         const client = await findClientByClientid(collection, client_id);
         
-
         if(!client){
             return res.status(404).send({
                 status: 404,
@@ -39,6 +38,11 @@ const authorize = async(req, res, collection, tokenCollection) => {
             })
         }
 
+        return res.status(200).send({
+            status: 200,
+            message: "Authorization succesfull"
+        })
+
     }catch (error){
         console.error('Authorization client error:', error);
         res.status(500).send({
@@ -51,7 +55,8 @@ const authorize = async(req, res, collection, tokenCollection) => {
 const authConsent = async (req, res, collection, tokenCollection) => {
     try{
 
-        const {client_id, userId, redirect_uri, state, approved } = req.body
+        const {client_id, redirect_uri, state, approved } = req.body;
+        const userId = req.session.userId;
 
         const client = await findClientByClientid(collection, client_id);
         if(!client){
@@ -70,13 +75,13 @@ const authConsent = async (req, res, collection, tokenCollection) => {
 
         if(!approved){
             const redirectURL = `${redirect_uri}?error=access_denied&state=${state}`;
-            res.redirect(redirectURL);
+            return res.json({ redirectUrl: redirectURL }); 
         }
 
-        const authCode = saveAuthCode(userId, client_id, tokenCollection);
+        const authCode = await saveAuthCode(userId, client_id, tokenCollection);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
-        return res.redirect(redirectURL);
+        return res.json({ redirectUrl: redirectURL });
 
     }catch(error){
         console.error('Error while giving consest', error);
