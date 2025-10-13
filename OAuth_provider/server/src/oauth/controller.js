@@ -14,7 +14,6 @@ const {
 
 const authorize = async(req, res, collection, tokenCollection) => {
     try{
-        console.log('start authorization')
         //State wordt in frontend gegenereerd
         const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
@@ -203,6 +202,13 @@ const getClientInfo = async (req, res, OAuthClientCollection) => {
     try{
 
         const { client_id } = req.query;
+
+        if(!client_id){
+            return res.status(401).send({
+                status: 401,
+                message: "Invalid client id"
+            })
+        }
 
         const client = await getClientInfoFromClientId(OAuthClientCollection, client_id);
 

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 export const AuthConsent = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const nav = useNavigate();
 
     const [urlParams, seturlParams] = useState({
         response_type: '',
@@ -12,6 +11,10 @@ export const AuthConsent = () => {
         redirect_uri: '',
         state: ''
     });
+    const [clientInfo, setClientInfo] = useState({
+        client_name: false,
+        scope: false
+    })
 
     useEffect(() => {
         console.log(searchParams);
@@ -23,6 +26,18 @@ export const AuthConsent = () => {
             state: searchParams.get('state')
         })
     }, [searchParams]);
+
+    useEffect(() => {
+        fetch(`http://localhost:3000/api/oauth/get-client-info?client_id=${searchParams.get('client_id')}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setClientInfo({
+                client_name: data.data.client.client_name,
+                scope: data.data.client.scope
+            })
+        })
+    }, [searchParams])
 
     const handleApprove = (e) => {
         e.preventDefault();
@@ -49,7 +64,7 @@ export const AuthConsent = () => {
     const handleDeny = (e) => {
         e.preventDefault();
 
-        console.log(urlParams)
+        console.log(urlParams);
 
         fetch(`http://localhost:3000/api/oauth/consent`, {
             method: 'POST',
@@ -68,13 +83,22 @@ export const AuthConsent = () => {
         .then(data => window.location.href = data.redirectUrl);
     }
 
-
     return (
         <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
             <h1>Toestemming nodig</h1>
             <p>
-                Wil toegang tot jouw profiel.
+                {   clientInfo.client_name &&
+                    clientInfo.client_name
+                } 
+                Wil toegang tot:
             </p>
+
+            <ul>
+                {
+                    clientInfo.scope && clientInfo.scope.map(item => <li>{item}</li>)
+                }
+            </ul>
+
             <div style={{ marginTop: "1.5rem" }}>
                 <button
                     onClick={handleApprove}
