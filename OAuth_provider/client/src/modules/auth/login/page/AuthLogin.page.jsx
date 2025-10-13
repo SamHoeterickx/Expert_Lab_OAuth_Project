@@ -57,7 +57,7 @@ export const AuthLogin = () => {
             if(data.status === 200){
                 setStatusCode(200);
                 setErrorMessage(false);
-                handleAuthorizationEndpoint()
+                handleAuthorizationEndpoint();
                 return
             }
 
@@ -87,7 +87,7 @@ export const AuthLogin = () => {
         .then(data => {
             console.log(data);
 
-            nav('/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}');
+            nav(`/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}`);
         })
     }
 

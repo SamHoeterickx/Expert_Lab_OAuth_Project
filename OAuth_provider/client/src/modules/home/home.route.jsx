@@ -6,7 +6,7 @@ import { ProtectedRoute } from "../../shared/auth/ProtectedRoute";
 export const HOME_ROUTE = {
     path: '',
     element: (
-        <ProtectedRoute>
+        <ProtectedRoute redirect_path={"/login"}>
             <Home />
         </ProtectedRoute>
     )
