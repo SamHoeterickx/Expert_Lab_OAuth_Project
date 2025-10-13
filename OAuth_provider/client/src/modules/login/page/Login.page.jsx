@@ -82,7 +82,7 @@ export const Login = () => {
                             <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
 
                                 <label>Password</label>
-                                <input type="password" name="email" onChange={ e => handleInputfield('password', e.target.value) }  />
+                                <input type="password" name="password" onChange={ e => handleInputfield('password', e.target.value) }  />
                             </div>
                             <input type="submit" value="Login" />
                             {

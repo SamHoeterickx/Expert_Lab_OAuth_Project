@@ -18,8 +18,6 @@ const register = async(req, res, userCollection) => {
         const { name, email, password, repeatPassword } = req.body;
         const existingUser = await findUserByEmail(userCollection, req.body.email);
 
-        console.log(req.body)
-
         if(!name || !email || !password || !repeatPassword){
             return res.status(422).send({
                 status: 422,
