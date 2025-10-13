@@ -57,7 +57,7 @@ export const AuthLogin = () => {
             if(data.status === 200){
                 setStatusCode(200);
                 setErrorMessage(false);
-                nav('/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&redirect_uri=${urlParams.redirect_uri}&state=${urlParams.state}');
+                handleAuthorizationEndpoint()
                 return
             }
 
@@ -67,7 +67,7 @@ export const AuthLogin = () => {
                 return
             }
 
-        });
+        })
     }
 
     const handleInputfield = (field, value) => {
@@ -77,6 +77,18 @@ export const AuthLogin = () => {
                 [field]: value
             }
         ))
+    }
+
+    const handleAuthorizationEndpoint = () => {
+        fetch(`http://localhost:3000/api/oauth/authorize?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}`, {
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+
+            nav('/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}');
+        })
     }
 
     return (

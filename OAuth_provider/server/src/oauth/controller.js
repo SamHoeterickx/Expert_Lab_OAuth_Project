@@ -32,6 +32,8 @@ const authorize = async(req, res, collection, tokenCollection) => {
             })
         }
 
+        console.log(client.redirect_uri, redirect_uri);
+
         if(redirect_uri !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
