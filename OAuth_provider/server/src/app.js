@@ -1,8 +1,9 @@
 require('dotenv').config();
 
+const cors = require('cors');
 const express = require('express');
-const { MongoClient } = require('mongodb')
 const session = require('express-session');
+const { MongoClient } = require('mongodb')
 
 const app = express();
 const port = 3000;
@@ -10,7 +11,6 @@ const port = 3000;
 //DB Setup
 const uri = process.env.DB_URI;
 const client = new MongoClient(uri);
-const cors = require('cors');
 const DB_NAME = "OAuth_provider_expert_lab_2025";
 const database = client.db(DB_NAME);
 
@@ -58,8 +58,7 @@ const startServer = async () => {
         await client.connect();
         console.log('Connected successfully to MongoDB server');
 
-        try {
-            
+        try {  
             await authTokenCollection.dropIndex('createdAt_1');
             console.log('Dropped old auth token index');
         } catch (error) {
