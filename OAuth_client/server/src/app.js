@@ -32,16 +32,17 @@ app.use(express.json());
 
 
 //Routes
-const userRoutes = require('./users/controller')(userCollection);
+const userRoutes = require('./users/route')(userCollection);
 
 app.use('/api/users', userRoutes);
+
+app.use('/', (req, res) => console.log("Hello world"))
 
 const startServer = async () => {
     try{
 
         await client.connect();
-        console.log('Connected succesfully to MongoDB server')
-
+        console.log('Connected succesfully to MongoDB server');
 
         app.listen(port, () => {
             console.log(`Example of app is listening on port: ${port}`);
@@ -52,3 +53,5 @@ const startServer = async () => {
         process.exit(1);
     }
 }
+
+startServer();
