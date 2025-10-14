@@ -24,6 +24,13 @@ const authorize = async(req, res, collection, tokenCollection) => {
 
         const client = await findClientByClientid(collection, client_id);
         
+        if(response_type !== 'code'){
+            return res.status(400).send({
+                status: 400,
+                message: 'Response type dont match'
+            })
+        }
+
         if(!client){
             return res.status(404).send({
                 status: 404,
