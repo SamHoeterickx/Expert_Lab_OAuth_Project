@@ -14,7 +14,6 @@ const {
 
 const authorize = async(req, res, collection, tokenCollection) => {
     try{
-        //State wordt in frontend gegenereerd
         const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
         if(!req.session.userId){
@@ -168,7 +167,11 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
             })
         }
 
-        if(redirect_uri !== client.redirect_uri){
+        console.log(redirect_uri)
+
+        console.log(decodeURIComponent(redirect_uri), client.redirect_uri)
+
+        if(decodeURIComponent(redirect_uri) !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
                 message: "Redirect uri doesn't match"
