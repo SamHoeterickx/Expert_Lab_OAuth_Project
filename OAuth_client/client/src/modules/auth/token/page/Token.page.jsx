@@ -1,5 +1,5 @@
 import { useState, useEffect} from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export const Token = () => {
     
@@ -16,6 +16,9 @@ export const Token = () => {
         client_name: undefined,
         scope: undefined
     })
+    const [userData, setUserData] = useState();
+
+    const nav = useNavigate();
 
     useEffect(() => {
         setUrlParams({
@@ -51,8 +54,6 @@ export const Token = () => {
                 });
                 handleGetUserInfo(data.data.access_token);
             }
-            // IF 200 -> save user info in database
-            //CHECK LOGIN 
         })
     }, [])
 
@@ -88,25 +89,32 @@ export const Token = () => {
             credentials: 'include'
         })
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then(data => {
+            console.log(data);
+            setUserData(data.data);
+            saveUserInfo(data);
+        });
     }
 
-    // const saveClientInfo = () => {
-    //     fetch(`http://localhost:8080/api/users/add-oauth-user`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': "application/json"
-    //         },
-    //         credentials: 'include',
-    //         body: JSON.stringify({
-    //             client_name: clientData: 
-    //         })
-    //     })
-    // }
-
-    useEffect(() => {
-        console.log(clientData);
-    },[clientData]);
+    const saveUserInfo = (data) => {
+        fetch(`http://localhost:8080/api/users/add-oauth-user`, {
+            method: 'POST',
+            headers: {
+                'Content-type': "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+        })
+        .then(respone => respone.json())
+        .then(data => {
+            if(data.status === 200){
+                window.location.href = import.meta.env.VITE_REDIRECT_AFTER_TOKEN;
+            }else if(data.status !== 200){
+                nav('/login') ;
+            }
+            console.log("data", data);
+        })
+    }
 
     return(
         <h1> Token </h1>

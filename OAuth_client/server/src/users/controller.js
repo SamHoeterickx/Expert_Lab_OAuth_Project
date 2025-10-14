@@ -2,7 +2,8 @@
 const {
     createNewUser,
     findUserByEmail,
-    verifyPassword
+    verifyPassword,
+    addUserToDB
 } = require('./model.js');
 
 const register = async (req, res, userCollection) => {
@@ -124,7 +125,39 @@ const login = async (req, res, userCollection) => {
     }
 }
 
+const saveUser = async (req, res, userCollection) => {
+    try{
+
+        const { data } = req.body;
+
+        const user = await addUserToDB(userCollection, data);
+        console.log(user);
+
+        if(!user){
+            return res.status(400).send({
+                status: 400,
+                message: "Error while creating user",
+                insertedId: result.insertedId
+            });
+        }
+
+        return res.status(201).send({
+            status: 201,
+            message: "User created successfully",
+            insertedId: result.insertedId
+        });
+
+    }catch(error){
+        console.error('Create user from OAuth error:', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
     login,
-    register
+    register,
+    saveUser
 }

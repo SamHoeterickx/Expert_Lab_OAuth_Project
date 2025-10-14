@@ -30,7 +30,6 @@ const getTokenInfo = async (accessToken, accessTokenCollection) => {
         access_token: accessToken
     });
 
-    console.log(result);
     return result
 }
 

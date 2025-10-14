@@ -22,8 +22,16 @@ const verifyPassword = async (password, hashedpassword) => {
     return await bcrypt.compare(password, hashedpassword);
 }
 
+const addUserToDB = async (userCollection, data) => {
+    const result = await userCollection.insertOne({
+        ...data
+    })
+    return result
+}
+
 module.exports = {
     createNewUser,
     findUserByEmail,
-    verifyPassword
+    verifyPassword,
+    addUserToDB
 }

@@ -120,9 +120,6 @@ const login = async(req, res, userCollection) => {
 const getUserInfo = async(req, res, userCollection, accessTokenCollection, OAuthClientCollection) => {
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
 
-    console.log(accessToken, "accesstoken");
-    console.log(req.headers)
-
     const validToken = checkTokenExists(accessToken, accessTokenCollection);
     if(!validToken || validToken === undefined){
         return res.status(401).send({
@@ -137,7 +134,6 @@ const getUserInfo = async(req, res, userCollection, accessTokenCollection, OAuth
 
     const clientScopes  = await findScopeWithClientId(client_id, OAuthClientCollection);
     const user = await findUserById(userId, userCollection);
-    console.log('user', user)
 
     if(!user){
         return res.status(404).send({

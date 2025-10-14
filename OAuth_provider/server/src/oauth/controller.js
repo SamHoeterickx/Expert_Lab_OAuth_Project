@@ -63,7 +63,6 @@ const authConsent = async (req, res, collection, tokenCollection) => {
 
         const {client_id, redirect_uri, state, approved } = req.body;
         const userId = req.session.userId;
-        console.log("userid", userId);
 
         const client = await findClientByClientid(collection, client_id);
         if(!client){
@@ -183,8 +182,6 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
                 message: 'Something went wrong, please try again'
             })
         }
-
-        console.log(result);
 
         return res.status(200).send({
             status: 200,
