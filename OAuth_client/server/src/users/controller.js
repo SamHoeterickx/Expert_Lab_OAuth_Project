@@ -54,12 +54,17 @@ const register = async (req, res, userCollection) => {
         const sessionId = user_id.toHexString();
         req.session.userId = sessionId;
 
-        if(newUser){
-            return res.status(201).send({
-                status: 201,
-                message: 'Account created succesfully'
-            })
+        if(!newUser){
+            return res.status(409).send({
+                status: 409,
+                message: 'Failed to create account'
+            }) 
         }
+
+        return res.status(201).send({
+            status: 201,
+            message: 'Account created succesfully'
+        }) 
 
     }catch(error){
         console.error('Register error:', error);

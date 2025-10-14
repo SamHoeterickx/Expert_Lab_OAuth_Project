@@ -10,7 +10,7 @@ const port = 8080;
 
 const uri = process.env.DB_URI;
 const client = new MongoClient(uri);
-const DB_NAME = "OAuth_client_exper_lab_2025";
+const DB_NAME = "OAuth_client_expert_lab_2025";
 const database = client.db(DB_NAME);
 
 const userCollection = database.collection('users');
@@ -36,7 +36,7 @@ const userRoutes = require('./users/route')(userCollection);
 
 app.use('/api/users', userRoutes);
 
-app.use('/', (req, res) => console.log("Hello world"))
+app.use('/', (req, res) => console.log("Hello world"));
 
 const startServer = async () => {
     try{

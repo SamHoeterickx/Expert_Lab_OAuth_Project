@@ -9,11 +9,12 @@ const createNewUser = async (userCollection, userData) => {
         email: userData.email,
         password: hashedPassword
     })
+
+    return result
 }
 
 const findUserByEmail = async (userCollection, email) => {
     const result = await userCollection.findOne({email: email});
-
     return result
 }
 
