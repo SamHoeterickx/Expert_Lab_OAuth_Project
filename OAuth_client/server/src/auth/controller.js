@@ -5,7 +5,6 @@ const auth = async(req, res, authStateCollection) => {
 
         const { client_id, redirect_uri } = req.body;
         const state = generateState();
-        const result = await saveState(authStateCollection);
 
         if(!client_id){
             return res.status(422).send({
@@ -14,7 +13,23 @@ const auth = async(req, res, authStateCollection) => {
             });
         }
 
-        const redirectUrl = `http://localhost:5731/#/auth/login?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${redirect_uri} `
+        if(!state){
+            return res.status(400).send({
+                status: 400,
+                message: 'Failed to generate state'
+            })
+        }
+
+        const savedStateResult = await saveState(authStateCollection, state);
+
+        if(!savedStateResult){
+            return res.status(400).send({
+                status: 400,
+                message: 'Failed to save state'
+            })
+        }
+
+        const redirectUrl = `http://localhost:5173/#/auth/login?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${redirect_uri} `
 
         return res.status(200).send({
             status: 200,

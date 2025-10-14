@@ -48,6 +48,43 @@ const startServer = async () => {
         await client.connect();
         console.log('Connected succesfully to MongoDB server');
 
+        try {
+            const indexes = await authStateCollection.indexes();
+            const existing = indexes.find(index => index.key.createdAt);
+
+            if (existing && existing.name !== 'auth_state_ttl') {
+
+                await authStateCollection.dropIndex(existing.name);
+                console.log(`Dropped old index: ${existing.name}`);
+
+            } else if (existing) {
+                console.log('TTL index already exists, skipping recreation');
+            }
+
+            await authStateCollection.createIndex(
+                { createdAt: 1 },
+                {
+                    expireAfterSeconds: 300, 
+                    name: 'auth_state_ttl' 
+                }
+            );
+
+            console.log('TTL index ensured successfully');
+        } catch (error) {
+            console.error('Error ensuring TTL index:', error);
+            process.exit(2);
+        }
+
+        await authStateCollection.createIndex(
+            {createdAt: 1},
+            {
+                expireAfterSeconds: 300,
+                name: 'auth_state_ttl'
+            }
+        );
+
+        console.log('State code TTL index created successfully');
+
         app.listen(port, () => {
             console.log(`Example of app is listening on port: ${port}`);
         })

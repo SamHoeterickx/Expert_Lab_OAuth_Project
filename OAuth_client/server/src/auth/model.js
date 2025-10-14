@@ -1,13 +1,20 @@
+const crypto = require('crypto');
 
 const generateState = () => {
-    return crypto.randomBytes(64).toHexString();
+    return crypto.randomBytes(64).toString('hex');
 }
 
-const safeState = (authStateCollection) => {
+const saveState = async (authStateCollection, state) => {
+    const result = await authStateCollection.insertOne({
+        state: state,
+        expires_at: 60 * 60,
+        createdAt: new Date()
+    });
 
+    return result
 }
 
 module.exports = {
     generateState,
-    safeState
+    saveState
 }
