@@ -18,7 +18,6 @@ export const AuthConsent = () => {
 
     useEffect(() => {
         console.log(searchParams);
-        // console.log(`Code: ${searchParams.get('code')}`);
         seturlParams({
             response_type: searchParams.get('response_type'),
             client_id: searchParams.get('client_id'),

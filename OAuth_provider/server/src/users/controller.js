@@ -120,8 +120,11 @@ const login = async(req, res, userCollection) => {
 const getUserInfo = async(req, res, userCollection, accessTokenCollection, OAuthClientCollection) => {
     const accessToken = req.headers.authorization?.replace('Bearer ', '');
 
+    console.log(accessToken, "accesstoken");
+    console.log(req.headers)
+
     const validToken = checkTokenExists(accessToken, accessTokenCollection);
-    if(!validToken){
+    if(!validToken || validToken === undefined){
         return res.status(401).send({
             status: 401,
             message: 'Access token is expired or invalid'

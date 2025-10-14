@@ -7,13 +7,21 @@ export const Token = () => {
     const [urlParams, setUrlParams] = useState({
         code: undefined,
         state: undefined
+    });
+    const [tokenData, setTokenData] = useState({
+        accessToken: undefined,
+        token_type: undefined,
+    });
+    const [clientData, setClientData] = useState({
+        client_name: undefined,
+        scope: undefined
     })
 
     useEffect(() => {
         setUrlParams({
             code: searchParams.get('code'),
             state: searchParams.get('state')
-        })
+        });
     }, [searchParams]);
 
 
@@ -26,7 +34,7 @@ export const Token = () => {
             credentials: 'include',
             body: JSON.stringify({
                 grant_type: "authorization_code",
-                code: urlParams.code,
+                code: searchParams.get('code'),
                 client_id: import.meta.env.VITE_CLIENT_ID,
                 client_secret: import.meta.env.VITE_CLIENT_SECRET,
                 redirect_uri: encodeURIComponent(import.meta.env.VITE_REDIRECT_URI)
@@ -34,11 +42,71 @@ export const Token = () => {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             //IF 200 -> get user info 
+            if(data.status === 200){
+                setTokenData({
+                    accessToken: data.data.access_token,
+                    token_type: data.data.token_type
+                });
+                handleGetUserInfo(data.data.access_token);
+            }
             // IF 200 -> save user info in database
             //CHECK LOGIN 
         })
-    })
+    }, [])
+
+    const handleGetUserInfo = (accessToken) => {
+
+        const client_id = import.meta.env.VITE_CLIENT_ID
+
+        fetch(`http://localhost:3000/api/oauth/get-client-info?client_id=${client_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-type': "application/json",
+            },
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            setClientData({
+                client_name: data.data.client.client_name,
+                scope: data.data.client.scope
+            });
+            getUserInfo(accessToken);
+        })
+
+    }
+
+    const getUserInfo = (accessToken) => {
+        fetch(`http://localhost:3000/api/users/userinfo`, {
+            headers: {
+                'Content-type': "application/json",
+                "authorization": `Bearer ${accessToken}`
+            },
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => console.log(data));
+    }
+
+    // const saveClientInfo = () => {
+    //     fetch(`http://localhost:8080/api/users/add-oauth-user`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-type': "application/json"
+    //         },
+    //         credentials: 'include',
+    //         body: JSON.stringify({
+    //             client_name: clientData: 
+    //         })
+    //     })
+    // }
+
+    useEffect(() => {
+        console.log(clientData);
+    },[clientData]);
 
     return(
         <h1> Token </h1>

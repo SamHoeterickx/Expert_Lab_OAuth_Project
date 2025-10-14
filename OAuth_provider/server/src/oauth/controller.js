@@ -22,7 +22,6 @@ const authorize = async(req, res, collection, tokenCollection) => {
         const userId = req.session.userId;
 
         const client = await findClientByClientid(collection, client_id);
-        console.log(client.redirect_uri, decodeURIComponent(redirect_uri))
         
         if(response_type !== 'code'){
             return res.status(400).send({
@@ -64,6 +63,7 @@ const authConsent = async (req, res, collection, tokenCollection) => {
 
         const {client_id, redirect_uri, state, approved } = req.body;
         const userId = req.session.userId;
+        console.log("userid", userId);
 
         const client = await findClientByClientid(collection, client_id);
         if(!client){
@@ -72,7 +72,7 @@ const authConsent = async (req, res, collection, tokenCollection) => {
                 message: 'OAuth client not found'
             })
         }
-        console.log(client.redirect_uri, redirect_uri)
+
         if(decodeURIComponent(redirect_uri) !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
@@ -88,7 +88,6 @@ const authConsent = async (req, res, collection, tokenCollection) => {
         const authCode = await saveAuthCode(userId, client_id, tokenCollection);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
-        console.log(redirectURL)
         return res.json({ redirectUrl: redirectURL });
 
     }catch(error){
@@ -167,10 +166,6 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
             })
         }
 
-        console.log(redirect_uri)
-
-        console.log(decodeURIComponent(redirect_uri), client.redirect_uri)
-
         if(decodeURIComponent(redirect_uri) !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
@@ -189,7 +184,7 @@ const token = async (req, res, collection, authTokenCollection, accessTokenColle
             })
         }
 
-        console.log(result)
+        console.log(result);
 
         return res.status(200).send({
             status: 200,
