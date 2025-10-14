@@ -3,7 +3,7 @@ const { generateState, saveState } = require('./model');
 const auth = async(req, res, authStateCollection) => {
     try{
 
-        const { client_id, redirect_uri } = req.body;
+        const { client_id, redirect_uri } = req.query;
         const state = generateState();
 
         console.log(redirect_uri)

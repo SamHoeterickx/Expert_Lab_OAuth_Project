@@ -73,8 +73,8 @@ const authConsent = async (req, res, collection, tokenCollection) => {
                 message: 'OAuth client not found'
             })
         }
-console.log(client.redirect_uri, redirect_uri)
-        if(redirect_uri !== client.redirect_uri){
+        console.log(client.redirect_uri, redirect_uri)
+        if(decodeURIComponent(redirect_uri) !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
                 message: "Redirect uri doesn't match"
@@ -82,13 +82,14 @@ console.log(client.redirect_uri, redirect_uri)
         }
 
         if(!approved){
-            const redirectURL = `${redirect_uri}?error=access_denied&state=${state}`;
+            const redirectURL = `${encodeURIComponent(redirect_uri)}?error=access_denied&state=${state}`;
             return res.json({ redirectUrl: redirectURL }); 
         }
 
         const authCode = await saveAuthCode(userId, client_id, tokenCollection);
 
         const redirectURL = `${redirect_uri}?code=${authCode}&state=${state}`;
+        console.log(redirectURL)
         return res.json({ redirectUrl: redirectURL });
 
     }catch(error){

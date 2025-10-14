@@ -4,21 +4,14 @@ export const AuthProviderButton = () => {
         e.preventDefault();
 
         const client_id = import.meta.env.VITE_CLIENT_ID;
-        const redirect_uri = import.meta.env.VITE_REDIRECT_URI;
+        const redirect_uri = encodeURIComponent(import.meta.env.VITE_REDIRECT_URI);
+        console.log(redirect_uri)
 
-        console.log("Redirect URI:", import.meta.env.VITE_REDIRECT_URI);
-        console.log("Redirect uri:", redirect_uri)
-
-        fetch(`http://localhost:8080/api/oauth/auth`, {
-            method: 'POST',
+        fetch(`http://localhost:8080/api/oauth/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}`, {
             headers: {
                 'Content-type': "application/json"
             },
-            credentials: 'include',
-            body: JSON.stringify({
-                client_id: client_id,
-                redirect_uri: encodeURIComponent(redirect_uri)
-            })
+            credentials: 'include'
         })
         .then(response => response.json())
         .then(data => {

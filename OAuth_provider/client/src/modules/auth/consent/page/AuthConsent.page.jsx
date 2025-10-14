@@ -58,7 +58,7 @@ export const AuthConsent = () => {
             }),
         })
         .then(response => response.json())
-        .then(data => window.location.href = data.redirectUrl);
+        .then(data => window.location.href = decodeURIComponent(data.redirectUrl));
     }
 
     const handleDeny = (e) => {
