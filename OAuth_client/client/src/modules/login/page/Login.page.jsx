@@ -1,9 +1,12 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { clsx } from "clsx";
 
+//Components
+import { AuthProviderButton } from "../../../shared/components/AuthProviderButton.jsx"
+
 //Styles
 import styles from "./login.module.scss";
-import { Link, redirect, useNavigate } from "react-router-dom";
 
 export const Login = () => {
 
@@ -91,6 +94,7 @@ export const Login = () => {
                                 ) 
                             }
                         </form> 
+                        <AuthProviderButton />
                         <Link to={"/register"} >Register</Link>
                     </section>
                 )

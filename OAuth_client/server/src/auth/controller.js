@@ -6,6 +6,8 @@ const auth = async(req, res, authStateCollection) => {
         const { client_id, redirect_uri } = req.body;
         const state = generateState();
 
+        console.log(redirect_uri)
+
         if(!client_id){
             return res.status(422).send({
                 status: 422,
@@ -28,13 +30,13 @@ const auth = async(req, res, authStateCollection) => {
                 message: 'Failed to save state'
             })
         }
-
+        console.log(redirect_uri)
         const redirectUrl = `http://localhost:5173/#/auth/login?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${redirect_uri} `
 
         return res.status(200).send({
             status: 200,
             message: 'Url created succesfully',
-            redirectUrl: redirectUrl
+            redirectUrl: redirectUrl,
         })
 
     }catch(error){

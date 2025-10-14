@@ -7,7 +7,7 @@ const generateState = () => {
 const saveState = async (authStateCollection, state) => {
     const result = await authStateCollection.insertOne({
         state: state,
-        expires_at: 60 * 60,
+        expires_at: 60 * 5,
         createdAt: new Date()
     });
 

@@ -30,7 +30,7 @@ export const AuthLogin = () => {
         seturlParams({
             response_type: searchParams.get('response_type'),
             client_id: searchParams.get('client_id'),
-            redirect_uri: searchParams.get('redirect_uri'),
+            redirect_uri: encodeURIComponent(searchParams.get('redirect_uri')),
             state: searchParams.get('state')
         })
     }, [searchParams])
@@ -91,7 +91,7 @@ export const AuthLogin = () => {
 
             if(data.status === 200){
                 setStatusCode(data.status);
-                return nav(`/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}`);
+                return nav(`/auth/consent?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${encodeURIComponent(urlParams.redirect_uri)}`);
             }
 
             if(data.status !== 200){

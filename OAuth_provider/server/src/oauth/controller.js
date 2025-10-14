@@ -23,6 +23,7 @@ const authorize = async(req, res, collection, tokenCollection) => {
         const userId = req.session.userId;
 
         const client = await findClientByClientid(collection, client_id);
+        console.log(client.redirect_uri, decodeURIComponent(redirect_uri))
         
         if(response_type !== 'code'){
             return res.status(400).send({
@@ -72,7 +73,7 @@ const authConsent = async (req, res, collection, tokenCollection) => {
                 message: 'OAuth client not found'
             })
         }
-
+console.log(client.redirect_uri, redirect_uri)
         if(redirect_uri !== client.redirect_uri){
             return res.status(400).send({
                 status: 400,
