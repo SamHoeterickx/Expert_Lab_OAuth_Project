@@ -13,7 +13,9 @@ const client = new MongoClient(uri);
 const DB_NAME = "OAuth_client_expert_lab_2025";
 const database = client.db(DB_NAME);
 
+//Collections
 const userCollection = database.collection('users');
+const authStateCollection = database.collection('authState');
 
 app.use(session({
     secret: "secret",
@@ -33,8 +35,10 @@ app.use(express.json());
 
 //Routes
 const userRoutes = require('./users/route')(userCollection);
+const authRoutes = require('./auth/route')(authStateCollection)
 
 app.use('/api/users', userRoutes);
+app.use('/api/oauth', authRoutes);
 
 app.use('/', (req, res) => console.log("Hello world"));
 
