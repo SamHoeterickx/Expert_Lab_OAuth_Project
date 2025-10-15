@@ -1,9 +1,10 @@
 require('dotenv').config();
 
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
-const session = require('express-session');
 const { MongoClient } = require('mongodb');
+const session = require('express-session');
 
 const app = express();
 const port = 8080;
@@ -18,14 +19,16 @@ const userCollection = database.collection('users');
 const authStateCollection = database.collection('authState');
 
 app.use(session({
-    secret: "secret",
+    secret: "abc",
     resave: false,
     saveUninitialized: false,
     coookie: {
         httpOnly: true,
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
+app.use(cookieParser('abc'));
 app.use(cors({
     origin: 'http://localhost:5174',
     credentials: true

@@ -94,7 +94,7 @@ export const AuthConsent = () => {
 
             <ul>
                 {
-                    clientInfo.scope && clientInfo.scope.map(item => <li>{item}</li>)
+                    clientInfo.scope && clientInfo.scope.map(item => <li key={item}>{item}</li>)
                 }
             </ul>
 

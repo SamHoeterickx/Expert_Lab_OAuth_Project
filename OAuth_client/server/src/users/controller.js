@@ -1,4 +1,4 @@
-
+const { findUserById } = require('../../../../OAuth_provider/server/src/users/model.js');
 const {
     createNewUser,
     findUserByEmail,
@@ -130,21 +130,63 @@ const saveUser = async (req, res, userCollection) => {
 
         const { data } = req.body;
 
-        const user = await addUserToDB(userCollection, data);
-        console.log(user);
+        const existingUser = await findUserByEmail(userCollection, data.email);
+        
+        if(existingUser){
+            const user_id = existingUser._id;
+            const sessionId = user_id.toHexString();
+            req.session.userId = sessionId;
 
-        if(!user){
+            res.cookie('userId', sessionId, {
+                httpOnly: true,
+                sameSite: 'lax',
+                signed: true,
+                maxAge: 24 * 60 * 60 * 1000
+            });
+
+            return res.status(201).send({
+                status: 201, 
+                message: 'User login Successfully',
+                data: {
+                    existingUser
+                }
+            });
+        }
+
+
+        const user = await addUserToDB(userCollection, data);
+
+        if(!user || !user.acknowledged){
             return res.status(400).send({
                 status: 400,
                 message: "Error while creating user",
-                insertedId: result.insertedId
             });
         }
+        
+        const newUser = await findUserByEmail(userCollection, data.email);
+        
+        if(!newUser){
+            return res.status(404).send({
+                status: 404,
+                message: 'User not found after creation'
+            });
+        }
+
+        const user_id = newUser._id;
+        const sessionId = user_id.toHexString();
+        req.session.userId = sessionId;
+
+        res.cookie('userId', sessionId, {
+            httpOnly: true,
+            sameSite: 'lax', // Changed from 'strict' for OAuth redirects
+            signed: true,
+            maxAge: 24 * 60 * 60 * 1000
+        });
 
         return res.status(201).send({
             status: 201,
             message: "User created successfully",
-            insertedId: result.insertedId
+            insertedId: user.insertedId
         });
 
     }catch(error){
@@ -156,8 +198,47 @@ const saveUser = async (req, res, userCollection) => {
     }
 }
 
+const getMyUserData = async(req, res, userCollection) => {
+    try {
+        console.log('All headers:', req.headers.cookie);
+        console.log('userId from signed cookie:', req.signedCookies.userId);
+        
+        const userId = req.signedCookies.userId;
+        
+        if(!userId){
+            return res.status(401).send({
+                status: 401,
+                message: 'Not authenticated'
+            });
+        }
+
+        const user = await findUserById(userId, userCollection);
+
+        if(!user){
+            return res.status(404).send({
+                status: 404,
+                message: 'User not found'
+            });
+        }
+
+        return res.status(200).send({
+            status: 200,
+            message: 'User found successfully',
+            data: user
+        });
+
+    } catch(error) {
+        console.error('Get user data error:', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    }
+}
+
 module.exports = {
     login,
     register,
-    saveUser
+    saveUser,
+    getMyUserData
 }

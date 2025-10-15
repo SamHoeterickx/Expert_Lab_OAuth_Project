@@ -24,7 +24,8 @@ const verifyPassword = async (password, hashedpassword) => {
 
 const addUserToDB = async (userCollection, data) => {
     const result = await userCollection.insertOne({
-        ...data
+        ...data,
+        created_at: new Date()
     })
     return result
 }
@@ -33,5 +34,5 @@ module.exports = {
     createNewUser,
     findUserByEmail,
     verifyPassword,
-    addUserToDB
+    addUserToDB,
 }

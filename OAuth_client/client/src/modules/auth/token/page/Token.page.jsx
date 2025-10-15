@@ -107,9 +107,9 @@ export const Token = () => {
         })
         .then(respone => respone.json())
         .then(data => {
-            if(data.status === 200){
+            if(data.status === 201){
                 window.location.href = import.meta.env.VITE_REDIRECT_AFTER_TOKEN;
-            }else if(data.status !== 200){
+            }else if(data.status !== 201){
                 nav('/login') ;
             }
             console.log("data", data);

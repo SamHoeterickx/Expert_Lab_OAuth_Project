@@ -126,7 +126,6 @@ export const AuthLogin = () => {
                         ) 
                     }
                 </form> 
-                <Link to={"/register"} >Register</Link>
             </section>
         </>
         
