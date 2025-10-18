@@ -30,7 +30,7 @@ app.use(session({
 }));
 app.use(cookieParser('abc'));
 app.use(cors({
-    origin: 'http://localhost:5174',
+    origin: 'https://lightpink-gorilla-173264.hostingersite.com/',
     credentials: true
 }));
 app.use(express.json());

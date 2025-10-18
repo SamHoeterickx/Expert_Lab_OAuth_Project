@@ -17,7 +17,7 @@ const authorize = async(req, res, collection, tokenCollection) => {
         const { response_type, client_id, redirect_uri, scope, state } = req.query;
 
         if(!req.session.userId){
-            return res.redirect('http://localhost:5173/api/login');
+            return res.redirect('https://skyblue-hyena-257309.hostingersite.com/#/auth/login');
         }
         const userId = req.session.userId;
 

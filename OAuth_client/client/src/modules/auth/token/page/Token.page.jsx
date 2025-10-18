@@ -29,7 +29,7 @@ export const Token = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:3000/api/oauth/token`, {
+        fetch(`https://expert-lab-oauth-project.onrender.com/api/oauth/token`, {
             method: 'POST',
             headers: {
                 'Content-type': "application/json"
@@ -61,7 +61,7 @@ export const Token = () => {
 
         const client_id = import.meta.env.VITE_CLIENT_ID
 
-        fetch(`http://localhost:3000/api/oauth/get-client-info?client_id=${client_id}`, {
+        fetch(`https://expert-lab-oauth-project.onrender.com/api/oauth/get-client-info?client_id=${client_id}`, {
             method: 'GET',
             headers: {
                 'Content-type': "application/json",
@@ -81,7 +81,7 @@ export const Token = () => {
     }
 
     const getUserInfo = (accessToken) => {
-        fetch(`http://localhost:3000/api/users/userinfo`, {
+        fetch(`https://expert-lab-oauth-project.onrender.com/api/users/userinfo`, {
             headers: {
                 'Content-type': "application/json",
                 "authorization": `Bearer ${accessToken}`
