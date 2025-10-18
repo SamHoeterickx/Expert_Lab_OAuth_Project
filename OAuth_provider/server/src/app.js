@@ -26,13 +26,26 @@ const accessTokenCollection = database.collection('accessTokens');
 //  httpOnly voorkomt dat Javascript de cookie kan lezen
 //  secure: alleen https in production
 //  Max age =  1000 * 60 * 60 = 1 uur
+
+// Devlopment
+// app.use(session({
+//     secret: "secret",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         httpOnly: true,
+//         secure: false,
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }));
+
 app.use(session({
     secret: "secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpOnly: true,
-        secure: false,
+        httpsOnly: true,
+        secure: true,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));

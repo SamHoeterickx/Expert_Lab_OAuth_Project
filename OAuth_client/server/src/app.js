@@ -17,17 +17,29 @@ const database = client.db(DB_NAME);
 //Collections
 const userCollection = database.collection('users');
 const authStateCollection = database.collection('authState');
+// Devlopment
+// app.use(session({
+//     secret: "abc",
+//     resave: false,
+//     saveUninitialized: false,
+//     coookie: {
+//         httpOnly: true,
+//         secure: false,
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }));
 
 app.use(session({
     secret: "abc",
     resave: false,
     saveUninitialized: false,
     coookie: {
-        httpOnly: true,
-        secure: false,
+        httpsOnly: true,
+        secure: true,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
+
 app.use(cookieParser('abc'));
 app.use(cors({
     origin: 'https://lightpink-gorilla-173264.hostingersite.com/',
