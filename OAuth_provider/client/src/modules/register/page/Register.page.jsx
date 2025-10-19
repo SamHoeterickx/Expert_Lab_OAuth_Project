@@ -8,6 +8,8 @@ import styles from "./register.module.scss";
 
 export const Register = () => {
 
+    document.title = 'Register | itsyou'
+
     const [registerForm, setRegisterForm] = useState({
         name: "",
         email: "",

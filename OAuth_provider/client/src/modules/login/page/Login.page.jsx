@@ -1,11 +1,13 @@
-import { useRef, useState } from "react";
 import { clsx } from "clsx";
+import { useRef, useState } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 
 //Styles
 import styles from "./login.module.scss";
-import { Link, redirect, useNavigate } from "react-router-dom";
 
 export const Login = () => {
+
+    document.title = "Login | itsyou";
 
     const [loginForm, setLoginForm] = useState({
         email: "",

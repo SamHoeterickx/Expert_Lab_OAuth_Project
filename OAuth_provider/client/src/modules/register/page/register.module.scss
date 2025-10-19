@@ -1,24 +1,136 @@
-.register-wrapper{
+// Kleurenpalet
+$itsyou-primary: #FF5A00;
+$itsyou-primary-hover: $itsyou-primary;
+$itsyou-bg: #f8f9fb;
+$itsyou-dark: #1f1f1f;
+$itsyou-grey: #ccc;
+$itsyou-error: #e53935;
 
-    height: 100dvh;
-    width: 100dvw;
+.register-wrapper {
+  height: 100dvh;
+  width: 100dvw;
+  background-color: $itsyou-bg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", "Segoe UI", sans-serif;
+  color: $itsyou-dark;
+  position: relative;
 
+  // Logo bovenaan
+  &::before {
+    content: "itsYOU";
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: #fff;
+    background-color: $itsyou-primary;
+    border-radius: 1rem;
+    padding: 0.5rem 1.2rem;
+    text-transform: lowercase;
+    margin-bottom: 2rem;
+    display: inline-block;
+    position: absolute;
+    top: 2rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: $itsyou-dark;
+    font-weight: 700;
+  }
+
+  // Register wrapper
+  &--form-wrapper {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    gap: 1.2rem;
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 400px;
+    animation: fadeIn 0.4s ease-in-out;
 
-    &--form-wrapper{
-        display: flex;
-        flex-direction: column;
-        width: 400px;
-        gap: 1rem;
+    &--input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
 
-        &--input-field{
-            display: flex;
-            flex-direction: column;
+      label {
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
 
+      input {
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        border: 1px solid $itsyou-grey;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+
+        &:focus {
+          border-color: $itsyou-primary;
+          outline: none;
+          box-shadow: 0 0 0 3px rgba($itsyou-primary, 0.25);
         }
+      }
     }
 
+    input[type="submit"] {
+      background-color: $itsyou-primary;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $itsyou-primary-hover;
+      }
+
+      &:disabled {
+        background-color: $itsyou-primary;
+        cursor: not-allowed;
+      }
+    }
+
+    span {
+      color: $itsyou-error;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+  }
+
+  // Login link
+  a {
+    margin-top: 1.5rem;
+    color: $itsyou-primary;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+
+    &:hover {
+      color: $itsyou-primary-hover;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Animaties
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
