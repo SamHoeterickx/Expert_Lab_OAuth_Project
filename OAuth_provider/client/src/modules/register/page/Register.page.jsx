@@ -35,7 +35,7 @@ export const Register = () => {
 
         if (!form.current) return
 
-        fetch('https://expert-lab-oauth-project.onrender.com/api/users/register', {
+        fetch('http://localhost:300/api/users/register', {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify({

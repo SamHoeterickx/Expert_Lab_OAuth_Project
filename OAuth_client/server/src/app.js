@@ -33,7 +33,7 @@ app.use(session({
     secret: "abc",
     resave: false,
     saveUninitialized: false,
-    coookie: {
+    cookie: {
         httpsOnly: true,
         secure: true,
         maxAge: 1000 * 60 * 60 * 24
@@ -42,7 +42,7 @@ app.use(session({
 
 app.use(cookieParser('abc'));
 app.use(cors({
-    origin: 'https://lightpink-gorilla-173264.hostingersite.com/',
+    origin: 'http://localhost:5174/',
     credentials: true
 }));
 app.use(express.json());

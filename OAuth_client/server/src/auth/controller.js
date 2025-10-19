@@ -31,7 +31,7 @@ const auth = async(req, res, authStateCollection) => {
             })
         }
         console.log(redirect_uri)
-        const redirectUrl = `https://skyblue-hyena-257309.hostingersite.com/#/auth/login?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${redirect_uri} `
+        const redirectUrl = `http://localhost:5173/#/auth/login?response_type=code&client_id=${client_id}&state=${state}&redirect_uri=${redirect_uri} `
 
         return res.status(200).send({
             status: 200,

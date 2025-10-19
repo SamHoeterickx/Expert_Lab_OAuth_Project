@@ -32,7 +32,7 @@ export const Login = () => {
 
         if (!form.current) return
 
-        fetch('https://expert-lab-oauth-project.onrender.com/api/users/login', {
+        fetch('http://localhost:300/api/users/login', {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify({

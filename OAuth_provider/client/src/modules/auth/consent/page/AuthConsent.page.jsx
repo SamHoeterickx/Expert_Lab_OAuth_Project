@@ -27,7 +27,7 @@ export const AuthConsent = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        fetch(`https://expert-lab-oauth-project.onrender.com/api/oauth/get-client-info?client_id=${searchParams.get('client_id')}`)
+        fetch(`http://localhost:300/api/oauth/get-client-info?client_id=${searchParams.get('client_id')}`)
         .then(response => response.json())
         .then(data => {
             console.log(data);
@@ -43,7 +43,7 @@ export const AuthConsent = () => {
 
         console.log(urlParams)
 
-        fetch(`https://expert-lab-oauth-project.onrender.com/api/oauth/consent`, {
+        fetch(`http://localhost:300/api/oauth/consent`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -65,7 +65,7 @@ export const AuthConsent = () => {
 
         console.log(urlParams);
 
-        fetch(`https://expert-lab-oauth-project.onrender.com/api/oauth/consent`, {
+        fetch(`http://localhost:300/api/oauth/consent`, {
             method: 'POST',
             credentials: 'include',
             headers: {
