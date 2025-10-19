@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { clsx } from "clsx";
 
 //Components
-import { AuthProviderButton } from "../../../shared/components/AuthProviderButton.jsx"
+import { AuthProviderButton } from "../../../shared/components/authProviderButton/AuthProviderButton.jsx"
 
 //Styles
 import styles from "./login.module.scss";
@@ -71,32 +71,46 @@ export const Login = () => {
         <>
             {
                 !isLoading && (
-                    <section className={clsx(styles["login-wrapper"])}>
+                   <section className={clsx(styles["login-wrapper"])}>
                         <h2>Login</h2>
-                        <form 
+
+                        <form
+                            ref={form}
+                            onSubmit={handleLogin}
                             className={clsx(styles["login-wrapper--form-wrapper"])}
-                            ref={ form }
-                            onSubmit={ handleLogin }
                         >
                             <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
-                                <label>Email</label>
-                                <input type="email" name="email" onChange={ e => handleInputfield('email', e.target.value) }  />
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                onChange={e => handleInputfield('email', e.target.value)}
+                            />
                             </div>
-                            <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
 
-                                <label>Password</label>
-                                <input type="password" name="password" onChange={ e => handleInputfield('password', e.target.value) }  />
+                            <div className={clsx(styles["login-wrapper--form-wrapper--input-field"])}>
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                onChange={e => handleInputfield('password', e.target.value)}
+                            />
                             </div>
+
                             <input type="submit" value="Login" />
-                            {
-                                statusCode !== 201 && errorMessage !== false && (
-                                    <span>{statusCode} - {errorMessage}</span>
-                                ) 
-                            }
-                        </form> 
-                        <AuthProviderButton />
-                        <Link to={"/register"} >Register</Link>
+
+                            {statusCode !== 201 && errorMessage !== false && (
+                            <span>{statusCode} - {errorMessage}</span>
+                            )}
+                        </form>
+
+                        <div className={clsx(styles["auth-provider-button-wrapper"])}>
+                            <AuthProviderButton />
+                        </div>
+
+                        <Link to="/register" className={clsx(styles["register-link"])}>Register</Link>
                     </section>
+
                 )
             }
 

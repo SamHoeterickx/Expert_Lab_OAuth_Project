@@ -1,0 +1,21 @@
+.auth-provider-button {
+  background-color: #FF5A00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+
+  &:hover {
+    background-color: #ff7a33;
+  }
+
+  &:disabled {
+    background-color: #FF5A00;
+    cursor: not-allowed;
+  }
+}
