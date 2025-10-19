@@ -1,6 +1,9 @@
 import { useState, useEffect} from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
+//Style
+import styles from './token.module.scss'
+
 export const Token = () => {
     
     const [searchParams] = useSearchParams();
@@ -117,6 +120,11 @@ export const Token = () => {
     }
 
     return(
-        <h1> Token </h1>
+        <div className={styles.wrapper}>
+            <div>
+                <div className={styles.loader}></div>
+                <h3>Loading</h3>
+            </div>
+        </div>
     )
 }
