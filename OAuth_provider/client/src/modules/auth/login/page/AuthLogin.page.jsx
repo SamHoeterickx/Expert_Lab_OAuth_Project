@@ -40,7 +40,7 @@ export const AuthLogin = () => {
 
         // ?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&redirect_uri=${urlParams.redirect_uri}&state=${urlParams.state}
         // response_type=code&client_id=ed123dd4dea3054139221adb9100177b&state=xyz&redirect_uri=https://localhost:5174/
-        fetch(`http://localhost:300/api/users/login`, {
+        fetch(`http://localhost:3000/api/users/login`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -82,7 +82,7 @@ export const AuthLogin = () => {
 
     const handleAuthorizationEndpoint = () => {
         console.log('handleAuthorizatoinEndpoint')
-        fetch(`http://localhost:300/api/oauth/authorize?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}`, {
+        fetch(`http://localhost:3000/api/oauth/authorize?response_type=${urlParams.response_type}&client_id=${urlParams.client_id}&state=${urlParams.state}&redirect_uri=${urlParams.redirect_uri}`, {
             credentials: 'include'
         })
         .then(response => response.json())

@@ -28,34 +28,37 @@ const accessTokenCollection = database.collection('accessTokens');
 //  Max age =  1000 * 60 * 60 = 1 uur
 
 // Devlopment
-// app.use(session({
-//     secret: "secret",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: {
-//         httpOnly: true,
-//         secure: false,
-//         maxAge: 1000 * 60 * 60 * 24
-//     }
-// }));
-
 app.use(session({
     secret: "secret",
     resave: false,
     saveUninitialized: false,
     cookie: {
-        httpsOnly: true,
-        secure: true,
+        httpOnly: true,
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
-app.use(cors({
-    origin: true,
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"] 
-}));
-app.use(express.json());
+// app.use(session({
+//     secret: "secret",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         httpsOnly: true,
+//         secure: true,
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }));
+
+const corsOptions = {
+    origin: "http://localhost:5173",  // jouw frontend
+    credentials: true,                // laat cookies toe
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 
 const userRoutes = require('./users/route')(userCollection, accessTokenCollection, OAuthClientCollection);
 const authRoutes = require('./oauth/route')(OAuthClientCollection, authTokenCollection, accessTokenCollection, OAuthClientCollection);

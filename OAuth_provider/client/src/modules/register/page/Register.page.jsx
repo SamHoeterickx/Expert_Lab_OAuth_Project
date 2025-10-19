@@ -37,7 +37,7 @@ export const Register = () => {
 
         if (!form.current) return
 
-        fetch('http://localhost:300/api/users/register', {
+        fetch('http://localhost:3000/api/users/register', {
             method: 'POST',
             credentials: "include",
             body: JSON.stringify({

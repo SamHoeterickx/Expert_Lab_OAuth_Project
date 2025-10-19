@@ -17,32 +17,32 @@ const database = client.db(DB_NAME);
 //Collections
 const userCollection = database.collection('users');
 const authStateCollection = database.collection('authState');
-// Devlopment
-// app.use(session({
-//     secret: "abc",
-//     resave: false,
-//     saveUninitialized: false,
-//     coookie: {
-//         httpOnly: true,
-//         secure: false,
-//         maxAge: 1000 * 60 * 60 * 24
-//     }
-// }));
-
+Devlopment
 app.use(session({
     secret: "abc",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        httpsOnly: true,
-        secure: true,
+    coookie: {
+        httpOnly: true,
+        secure: false,
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
+// app.use(session({
+//     secret: "abc",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         httpsOnly: true,
+//         secure: true,
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }));
+
 app.use(cookieParser('abc'));
 app.use(cors({
-    origin: 'http://localhost:5174/',
+    origin: 'http://localhost:5174',
     credentials: true
 }));
 app.use(express.json());
