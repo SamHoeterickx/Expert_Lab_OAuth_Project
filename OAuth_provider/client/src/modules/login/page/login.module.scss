@@ -1,6 +1,6 @@
 // Kleurenpalet
 $itsyou-primary: #FF5A00;
-$itsyou-primary-hover: darken($itsyou-primary, 10%);
+$itsyou-primary-hover: $itsyou-primary, 10%;
 $itsyou-bg: #f8f9fb; 
 $itsyou-dark: #1f1f1f; 
 $itsyou-grey: #ccc;
@@ -40,6 +40,7 @@ $itsyou-error: #e53935;
     margin-bottom: 2rem;
     color: $itsyou-dark;
     font-weight: 700;
+    text-align: center;
   }
 
   // Login wrapper
@@ -96,7 +97,7 @@ $itsyou-error: #e53935;
       }
 
       &:disabled {
-        background-color: lighten($itsyou-primary, 15%);
+        background-color: $itsyou-primary;
         cursor: not-allowed;
       }
     }

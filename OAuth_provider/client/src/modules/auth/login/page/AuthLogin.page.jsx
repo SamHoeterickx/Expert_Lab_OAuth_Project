@@ -104,7 +104,7 @@ export const AuthLogin = () => {
     return (
         <>
             <section className={clsx(styles["login-wrapper"])}>
-                <h2>Auth Login</h2>
+                <h2>Login with your itsyou account <br /> to continue</h2>
                 <form 
                     className={clsx(styles["login-wrapper--form-wrapper"])}
                     ref={ form }

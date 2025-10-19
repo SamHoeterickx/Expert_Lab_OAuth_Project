@@ -1,132 +1,107 @@
+import { clsx } from "clsx";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
+//Style
+import styles from "./authConsent.module.scss";
+
 export const AuthConsent = () => {
+  const [searchParams] = useSearchParams();
 
-    const [searchParams, setSearchParams] = useSearchParams();
+  const [urlParams, setUrlParams] = useState({
+    response_type: "",
+    client_id: "",
+    redirect_uri: "",
+    state: "",
+  });
+  const [clientInfo, setClientInfo] = useState({
+    client_name: false,
+    scope: [],
+  });
 
-    const [urlParams, seturlParams] = useState({
-        response_type: '',
-        client_id: '',
-        redirect_uri: '',
-        state: ''
+  useEffect(() => {
+    setUrlParams({
+      response_type: searchParams.get("response_type"),
+      client_id: searchParams.get("client_id"),
+      redirect_uri: searchParams.get("redirect_uri"),
+      state: searchParams.get("state"),
     });
-    const [clientInfo, setClientInfo] = useState({
-        client_name: false,
-        scope: false
+  }, [searchParams]);
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/oauth/get-client-info?client_id=${searchParams.get("client_id")}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setClientInfo({
+          client_name: data.data.client.client_name,
+          scope: data.data.client.scope || [],
+        });
+      });
+  }, [searchParams]);
+
+  const handleApprove = (e) => {
+    e.preventDefault();
+
+    fetch(`http://localhost:3000/api/oauth/consent`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        client_id: urlParams.client_id,
+        redirect_uri: urlParams.redirect_uri,
+        state: urlParams.state,
+        approved: true,
+      }),
     })
+      .then((response) => response.json())
+      .then((data) => (window.location.href = decodeURIComponent(data.redirectUrl)));
+  };
 
-    useEffect(() => {
-        console.log(searchParams);
-        seturlParams({
-            response_type: searchParams.get('response_type'),
-            client_id: searchParams.get('client_id'),
-            redirect_uri: searchParams.get('redirect_uri'),
-            state: searchParams.get('state')
-        })
-    }, [searchParams]);
+  const handleDeny = (e) => {
+    e.preventDefault();
 
-    useEffect(() => {
-        fetch(`http://localhost:3000/api/oauth/get-client-info?client_id=${searchParams.get('client_id')}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            setClientInfo({
-                client_name: data.data.client.client_name,
-                scope: data.data.client.scope
-            })
-        })
-    }, [searchParams])
+    fetch(`http://localhost:3000/api/oauth/consent`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        client_id: urlParams.client_id,
+        redirect_uri: urlParams.redirect_uri,
+        state: urlParams.state,
+        approved: false,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => (window.location.href = data.redirectUrl));
+  };
 
-    const handleApprove = (e) => {
-        e.preventDefault();
+  return (
+    <section className={clsx(styles["consent-wrapper"])}>
+      <div className={clsx(styles["consent-wrapper--card"])}>
+        <h2>Toestemming nodig</h2>
+        <p>
+          <strong>{clientInfo.client_name || "Deze applicatie"}</strong> wil toegang tot:
+        </p>
 
-        console.log(urlParams)
+        <ul>
+          {clientInfo.scope?.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
 
-        fetch(`http://localhost:3000/api/oauth/consent`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-type': "application/json"
-            },
-            body: JSON.stringify({
-                client_id: urlParams.client_id,
-                redirect_uri: urlParams.redirect_uri,
-                state: urlParams.state,
-                approved: true
-            }),
-        })
-        .then(response => response.json())
-        .then(data => window.location.href = decodeURIComponent(data.redirectUrl));
-    }
-
-    const handleDeny = (e) => {
-        e.preventDefault();
-
-        console.log(urlParams);
-
-        fetch(`http://localhost:3000/api/oauth/consent`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-type': "application/json"
-            },
-            body: JSON.stringify({
-                client_id: urlParams.client_id,
-                redirect_uri: urlParams.redirect_uri,
-                state: urlParams.state,
-                approved: false
-            }),
-        })
-        .then(response => response.json())
-        .then(data => window.location.href = data.redirectUrl);
-    }
-
-    return (
-        <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-            <h1>Toestemming nodig</h1>
-            <p>
-                {   clientInfo.client_name &&
-                    clientInfo.client_name
-                } 
-                Wil toegang tot:
-            </p>
-
-            <ul>
-                {
-                    clientInfo.scope && clientInfo.scope.map(item => <li key={item}>{item}</li>)
-                }
-            </ul>
-
-            <div style={{ marginTop: "1.5rem" }}>
-                <button
-                    onClick={handleApprove}
-                    style={{
-                        padding: "0.5rem 1rem",
-                        marginRight: "1rem",
-                        backgroundColor: "#4caf50",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Sta toe
-                </button>
-                <button
-                    onClick={handleDeny}
-                    style={{
-                        padding: "0.5rem 1rem",
-                        backgroundColor: "#f44336",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Weiger
-                </button>
-            </div>
+        <div className={clsx(styles["consent-wrapper--actions"])}>
+          <button onClick={handleApprove} className={clsx(styles["approve"])}>
+            Sta toe
+          </button>
+          <button onClick={handleDeny} className={clsx(styles["deny"])}>
+            Weiger
+          </button>
         </div>
-    )
-}
+      </div>
+    </section>
+  );
+};
