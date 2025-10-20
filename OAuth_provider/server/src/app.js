@@ -14,6 +14,8 @@ const client = new MongoClient(uri);
 const DB_NAME = "OAuth_provider_expert_lab_2025";
 const database = client.db(DB_NAME);
 
+const COOKIE_SECRET = process.env.COOKIE_SECRET
+
 const userCollection = database.collection('users');
 const OAuthClientCollection = database.collection('OAuth');
 const authTokenCollection = database.collection('tokens');
@@ -29,7 +31,7 @@ const accessTokenCollection = database.collection('accessTokens');
 
 // Devlopment
 app.use(session({
-    secret: "secret",
+    secret: COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -40,7 +42,7 @@ app.use(session({
 }));
 
 // app.use(session({
-//     secret: "secret",
+//     secret: COOKIE_SECRET,
 //     resave: false,
 //     saveUninitialized: false,
 //     cookie: {

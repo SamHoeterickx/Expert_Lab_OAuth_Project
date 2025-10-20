@@ -14,12 +14,14 @@ const client = new MongoClient(uri);
 const DB_NAME = "OAuth_client_expert_lab_2025";
 const database = client.db(DB_NAME);
 
+const COOKIE_SECRET = process.env.COOKIE_SECRET;
+
 //Collections
 const userCollection = database.collection('users');
 const authStateCollection = database.collection('authState');
 // Devlopment
 app.use(session({
-    secret: "abc",
+    secret: COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
     coookie: {
@@ -30,7 +32,7 @@ app.use(session({
 }));
 
 // app.use(session({
-//     secret: "abc",
+//     secret: COOKIE_SECRET,
 //     resave: false,
 //     saveUninitialized: false,
 //     cookie: {
@@ -40,7 +42,7 @@ app.use(session({
 //     }
 // }));
 
-app.use(cookieParser('abc'));
+app.use(cookieParser(COOKIE_SECRET));
 app.use(cors({
     origin: ['http://localhost:5174', 'http://localhost:5173'],
     credentials: true
