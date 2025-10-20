@@ -50,15 +50,12 @@ app.use(session({
 //     }
 // }));
 
-const corsOptions = {
-    origin: "http://localhost:5173",  // jouw frontend
-    credentials: true,                // laat cookies toe
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-};
+app.use(cors({
+    origin: ['http://localhost:5174', 'http://localhost:5173'],
+    credentials: true
+}));
+app.use(express.json());
 
-app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
 
 const userRoutes = require('./users/route')(userCollection, accessTokenCollection, OAuthClientCollection);
 const authRoutes = require('./oauth/route')(OAuthClientCollection, authTokenCollection, accessTokenCollection, OAuthClientCollection);

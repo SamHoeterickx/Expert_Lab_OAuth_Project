@@ -17,7 +17,7 @@ const database = client.db(DB_NAME);
 //Collections
 const userCollection = database.collection('users');
 const authStateCollection = database.collection('authState');
-Devlopment
+// Devlopment
 app.use(session({
     secret: "abc",
     resave: false,
@@ -42,7 +42,7 @@ app.use(session({
 
 app.use(cookieParser('abc'));
 app.use(cors({
-    origin: 'http://localhost:5174',
+    origin: ['http://localhost:5174', 'http://localhost:5173'],
     credentials: true
 }));
 app.use(express.json());
