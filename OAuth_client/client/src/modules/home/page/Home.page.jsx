@@ -23,14 +23,25 @@ export const Home = () => {
             setUserData(data.data);
             setIsLoggedIn(true);
         });
-    }, []) 
+    }, []);
+    
+    const handleLogout = () => {
+        fetch('http://localhost:8080/api/users/logout', {
+            credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => {
+            setUserData(undefined);
+            setIsLoggedIn(false);
+        })
+    }
 
     return (
         <div className={clsx(styles["home-container"])}>
            <div className={clsx(styles["hero-header"])}>
                 { userData ? <h1>Welkom {userData.name} </h1> : <h1>Welkom, ...</h1> }
                 {
-                    !isLoggedIn ? <Link to="/login" className={clsx(styles["link-button"])}>Login</Link> : <Link to="/logout" className={clsx(styles["link-button"])}>Logout</Link>
+                    !isLoggedIn ? <Link to="/login" className={clsx(styles["link-button"])}>Login</Link> : <button onClick={ handleLogout } className={clsx(styles["link-button"])}>Logout</button>
                 }
            </div>
 

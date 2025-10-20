@@ -213,10 +213,7 @@ const saveUser = async (req, res, userCollection) => {
 }
 
 const getMyUserData = async(req, res, userCollection) => {
-    try {
-        console.log('All headers:', req.headers.cookie);
-        console.log('userId from signed cookie:', req.signedCookies.userId);
-        
+    try {        
         const userId = req.signedCookies.userId;
         
         if(!userId){
@@ -250,9 +247,34 @@ const getMyUserData = async(req, res, userCollection) => {
     }
 }
 
+const logout = (req, res) => {
+    try {
+        const sessionId = req.signedCookies.userId;
+        
+        res.clearCookie('userId', {
+            httpOnly: true, 
+            signed: true,  
+            path: '/',     
+        });
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Logout successful'
+        });
+
+    } catch (error) {
+        console.error('Logout error:', error);
+        return res.status(500).send({
+            status: 500,
+            message: 'An unexpected error occurred during logout.'
+        });
+    }
+}
+
 module.exports = {
     login,
     register,
     saveUser,
-    getMyUserData
+    getMyUserData,
+    logout
 }
