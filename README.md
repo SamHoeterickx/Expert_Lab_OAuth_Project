@@ -19,6 +19,10 @@ To run this project locally, follow these steps:
   
 <br>
 
+## Research
+[Read my research file](./OAuth-research.md)
+
+
 ## Sources 
 - [Merlino - oauth steps](https://merlino.agency/blog/step-by-step-how-to-implement-oauth2-server-in-expressjs?utm_source=chatgpt.com)
 - [OAuth - example flow](https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/?utm_source=chatgpt.com)
