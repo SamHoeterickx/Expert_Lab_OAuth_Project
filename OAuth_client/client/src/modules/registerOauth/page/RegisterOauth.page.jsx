@@ -3,6 +3,8 @@ import clsx from 'clsx';
 
 //Style
 import styles from './registerOauth.module.scss';
+import { RegisterOAuthForm } from "../components/RegisterOAuthForm";
+import { OAuthData } from "../components/OAuthData";
 
 export const RegisterOauth = () => {
 
@@ -12,7 +14,12 @@ export const RegisterOauth = () => {
         client_uri: undefined,
         redirect_uri: undefined,
         scope: []
-    })
+    });
+    const [oauthData, setOauthData] = useState({
+        client_id: undefined,
+        client_secret: undefined
+    });
+    const [isRegisterSuccessFull, setIsRegisterSuccessfull] = useState(false);
 
     const formRef = useRef();
 
@@ -27,7 +34,15 @@ export const RegisterOauth = () => {
             body: JSON.stringify(formData)
         })
         .then(response => response.json())
-        .then(data => console.log(data));
+        .then(data => {
+            if(data.status === 201){
+                setIsRegisterSuccessfull(true);
+                setOauthData({
+                    client_id: data.client_id,
+                    client_secret: data.client_secret
+                })
+            }
+        });
     }
 
     const handleInputfield = (field, value) => {
@@ -60,70 +75,25 @@ export const RegisterOauth = () => {
     
  
     return(
-        <section className={clsx(styles["register-oauth-wrapper"])}>
-            <h2>Register OAuth Client</h2>
-
-            <form
-                ref={formRef}
-                onSubmit={handleFormSubmition}
-                className={clsx(styles["register-oauth-form"])}
-            >
-                <div className={clsx(styles["register-oauth-form--input-field"])}>
-                    <label htmlFor="client_name">Name</label>
-                    <input
-                        type="text"
-                        id="client_name"
-                        onChange={e => handleInputfield('client_name', e.target.value)}
+        <>
+            {
+                !isRegisterSuccessFull ? (
+                    <RegisterOAuthForm
+                        formRef={formRef}
+                        handleFormSubmition={handleFormSubmition}
+                        handleInputfield={handleInputfield}
+                        handleScopeChange={handleScopeChange}
                     />
-                </div>
-
-                <div className={clsx(styles["register-oauth-form--input-field"])}>
-                    <label htmlFor="owner_email">Owner Email</label>
-                    <input
-                        type="email"
-                        id="owner_email"
-                        onChange={e => handleInputfield('owner_email', e.target.value)}
+                ) : (
+                    <OAuthData
+                        client_id={oauthData.client_id}
+                        client_secret={oauthData.client_secret}
+                        redirect_uri={formData.redirect_uri}
+                        base_uri={formData.base_uri}
+                        scope={formData.scope}
                     />
-                </div>
-
-                <div className={clsx(styles["register-oauth-form--input-field"])}>
-                    <label htmlFor="redirect_uri">Redirect URL</label>
-                    <input
-                        type="url"
-                        id="redirect_uri"
-                        onChange={e => handleInputfield('redirect_uri', e.target.value)}
-                    />
-                </div>
-
-                <div className={clsx(styles["register-oauth-form--input-field"])}>
-                    <label htmlFor="client_uri">Base Website URL</label>
-                    <input
-                        type="url"
-                        id="client_uri"
-                        onChange={e => handleInputfield('client_uri', e.target.value)}
-                    />
-                </div>
-
-                <div className={clsx(styles["register-oauth-form--scope-section"])}>
-                    <label>Scope</label>
-                    <div className={clsx(styles["scope-options"])}>
-                        {
-                            ["profile", "openid", "email", "phone", "address"].map(scope => (
-                                <label key={scope}>
-                                    <input
-                                    type="checkbox"
-                                    value={scope}
-                                    onChange={handleScopeChange}
-                                />
-                                    {scope.charAt(0).toUpperCase() + scope.slice(1)}
-                                </label>
-                            ))
-                        }
-                    </div>
-                </div>
-
-                <input type="submit" value="Next" />
-            </form>
-        </section>
+                )
+            }
+        </>
     );
 }
