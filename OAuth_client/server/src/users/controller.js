@@ -62,6 +62,13 @@ const register = async (req, res, userCollection) => {
             }) 
         }
 
+        res.cookie('userId', sessionId, {
+            httpOnly: true,
+            sameSite: 'lax',
+            signed: true,
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
         return res.status(201).send({
             status: 201,
             message: 'Account created succesfully'
@@ -107,8 +114,15 @@ const login = async (req, res, userCollection) => {
         }
 
         const user_id = user._id;
-        const sessioId = user_id.toHexString();
-        req.session.userId = sessioId;
+        const sessionId = user_id.toHexString();
+        req.session.userId = sessionId;
+
+        res.cookie('userId', sessionId, {
+            httpOnly: true,
+            sameSite: 'lax',
+            signed: true,
+            maxAge: 24 * 60 * 60 * 1000
+        });
 
         return res.status(200).send({
             status: 200,
@@ -178,7 +192,7 @@ const saveUser = async (req, res, userCollection) => {
 
         res.cookie('userId', sessionId, {
             httpOnly: true,
-            sameSite: 'lax', // Changed from 'strict' for OAuth redirects
+            sameSite: 'lax',
             signed: true,
             maxAge: 24 * 60 * 60 * 1000
         });
