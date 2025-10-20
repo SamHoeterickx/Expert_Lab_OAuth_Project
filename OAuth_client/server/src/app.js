@@ -49,11 +49,13 @@ app.use(express.json());
 
 
 //Routes
+const authRoutes = require('./auth/route')(authStateCollection);
 const userRoutes = require('./users/route')(userCollection);
-const authRoutes = require('./auth/route')(authStateCollection)
+const sessionRoutes = require('./session/route');
 
-app.use('/api/users', userRoutes);
 app.use('/api/oauth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api', sessionRoutes);
 
 app.use('/', (req, res) => console.log("Hello world"));
 
