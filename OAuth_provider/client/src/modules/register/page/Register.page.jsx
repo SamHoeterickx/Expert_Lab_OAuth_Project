@@ -14,7 +14,9 @@ export const Register = () => {
         name: "",
         email: "",
         password: "",
-        repeatPassword: ""
+        repeatPassword: "",
+        phone: "",
+        adress: ""
     });
     const [statusCode, setStatusCode] = useState(undefined);
     const [errorMessage, setErrorMessage] = useState(false);
@@ -31,6 +33,7 @@ export const Register = () => {
             }
         ))
     }
+    
     const handleRegister = (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -44,7 +47,9 @@ export const Register = () => {
                 name: registerForm.name,
                 email: registerForm.email,
                 password: registerForm.password,
-                repeatPassword: registerForm.repeatPassword
+                repeatPassword: registerForm.repeatPassword,
+                phone: registerForm.phone,
+                adress: registerForm.adress
             }),
             headers: {
                 'Content-type': "application/json"
@@ -97,6 +102,14 @@ export const Register = () => {
                             <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
                                 <label>Repeat Password</label>
                                 <input type="password" name="repeatPassword" onChange={ e => handleInputfield('repeatPassword', e.target.value) }  />
+                            </div>
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
+                                <label>Phone</label>
+                                <input type="phoe" name="phone" onChange={ e => handleInputfield('phone', e.target.value) }  />
+                            </div>
+                            <div className={clsx(styles["register-wrapper--form-wrapper--input-field"])}>
+                                <label>Adress: street + number + city</label>
+                                <input type="text" name="adress" onChange={ e => handleInputfield('adress', e.target.value) }  />
                             </div>
                             <input type="submit" value="Register" />
                             {

@@ -1,5 +1,10 @@
 import { clsx } from "clsx";
+import { Link } from 'react-router-dom'
+//Styles
 import styles from "../page/registerOauth.module.scss";
+
+//Routes
+import { HOME_ROUTE } from "../../home/home.route";
 
 export const OAuthData = ({ client_id, client_secret, redirect_uri, base_uri, scope }) => {
   return (
@@ -42,6 +47,7 @@ export const OAuthData = ({ client_id, client_secret, redirect_uri, base_uri, sc
                 }
             </div>
         </div>
+        <Link to='/' className={clsx(styles["link-button"])} >Home</Link>
     </section>
   );
 };

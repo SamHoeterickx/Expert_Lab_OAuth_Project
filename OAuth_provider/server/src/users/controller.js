@@ -15,7 +15,7 @@ const {
 const register = async(req, res, userCollection) => {
 
     try{
-        const { name, email, password, repeatPassword } = req.body;
+        const { name, email, password, repeatPassword, phone, adress } = req.body;
         const existingUser = await findUserByEmail(userCollection, req.body.email);
 
         if(!name || !email || !password || !repeatPassword){
@@ -39,7 +39,7 @@ const register = async(req, res, userCollection) => {
             })            
         }
 
-        const newUser = await createUser(userCollection, {name, email, password, repeatPassword});
+        const newUser = await createUser(userCollection, {name, email, password, repeatPassword, phone, adress});
         const user = await findUserByEmail(userCollection, email);
 
         if(!user){

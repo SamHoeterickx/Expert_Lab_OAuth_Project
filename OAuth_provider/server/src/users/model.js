@@ -1,13 +1,15 @@
 const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 
-const createUser = async (collection, { name, email, password}) => {
+const createUser = async (collection, { name, email, password, phone, adress }) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result =  await collection.insertOne({
         name: name,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
+        phone: phone,
+        adress: adress
     });
 
     return result;
