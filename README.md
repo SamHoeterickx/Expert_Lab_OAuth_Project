@@ -1,135 +1,132 @@
 # Expertlab 2025 OAuth Project
 
-Dit project implementeert een volledige OAuth 2.0 Authorization Code Flow en OpenID Connect op basis van een gescheiden microservice-architectuur. Het bestaat uit twee onafhankelijke applicaties: een OAuth Client ("Resource Server") en een OAuth Provider ("Authorization Server").
+This project implements a full OAuth 2.0 Authorization Code Flow and OpenID Connect based on a separated microservice architecture. It consists of two independent applications: an OAuth Client ("Resource Server") and an OAuth Provider ("Authorization Server").
 
 ---
 
-## 🏗 Project Architectuur
+## Project Architecture
 
-Het project is opgesplitst in twee hoofdmappen, die elk een aparte applicatie vormen:
+The project is split into two main folders, each forming a separate application:
 
-
-| Map              | Rol                                                 | Technologie                     | Poort (Standaard) | Database Naam                    |
-| ---------------- | --------------------------------------------------- | ------------------------------- | ----------------- | -------------------------------- |
-| `OAuth_provider` | Authorization Server (Authenticatie en toestemming) | ExpressJS, MongoDB, React, Vite | 3000              | `OAuth_provider_expert_lab_2025` |
-| `OAuth_client`   | Resource Client (Gebruikt OAuth voor login)         | ExpressJS, MongoDB, React, Vite | 8080              | `OAuth_client_expert_lab_2025`   |
+| Folder           | Role                                            | Technology                      | Port (Default) | Database Name                    |
+| ---------------- | ----------------------------------------------- | ------------------------------- | -------------- | -------------------------------- |
+| `OAuth_provider` | Authorization Server (Authentication & Consent) | ExpressJS, MongoDB, React, Vite | 3000           | `OAuth_provider_expert_lab_2025` |
+| `OAuth_client`   | Resource Client (Uses OAuth for login)          | ExpressJS, MongoDB, React, Vite | 8080           | `OAuth_client_expert_lab_2025`   |
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 **Frontend (Client & Provider)**
 
-- React
-- Vite
-- Sass (voor styling)
+* React
+* Vite
+* Sass (for styling)
 
 **Backend (Client & Provider)**
 
-- ExpressJS
-- MongoDB (als database)
-- Bcrypt (voor wachtwoordhashing)
-- Express-Session (voor sessiebeheer)
-- Nodemon (voor ontwikkeling)
+* ExpressJS
+* MongoDB
+* Bcrypt (for password hashing)
+* Express-Session (for session management)
+* Nodemon (for development)
 
 ---
 
-## 🚀 Up and Running (Stap-voor-stap Setup)
+## Getting Started (Step-by-Step Setup)
 
-Om het project lokaal te starten, moet je zowel de OAuth_provider als de OAuth_client instellen en uitvoeren.
+To run the project locally, you need to set up and run both OAuth_provider and OAuth_client.
 
-### 1. Repository Klone en Navigeer
+### 1. Clone the Repository and Navigate
 
 ```bash
 git clone <repo-link>
 ```
 
-### 2. Back-end Setup (Provider en Client Servers)
+### 2. Backend Setup (Provider and Client Servers)
 
-Beide servermappen hebben een afzonderlijke setup nodig.
+Both server folders require a separate setup.
 
-#### A. OAuth_provider/server (Poort 3000)
+#### A. OAuth_provider/server (Port 3000)
 
-**Installeer afhankelijkheden:**
+**Install dependencies:**
 
 ```bash
 cd OAuth_provider/server
 npm install
 ```
 
-**Creëer .env bestand:**
-Maak een `.env`-bestand in deze map en voeg de volgende variabelen toe (vervang `<YOUR_DB_URI>`):
+**Create .env file:**
 
 ```
 DB_URI=<YOUR_DB_URI>
 COOKIE_SECRET=<YOUR_SECRET>
 ```
 
-**Start de server:**
+**Start the server:**
 
 ```bash
 npm start
-# De provider server start op http://localhost:3000
+# The provider server starts at http://localhost:3000
 ```
 
-> 💡 *Opmerking over MongoDB:* De server stelt automatisch TTL-indexen in op de MongoDB-collecties: `auth_code` vervalt na 300 seconden, en `access_token` na 3600 seconden.
+> Note on MongoDB: The server automatically sets TTL indexes on collections: `auth_code` expires after 300 seconds, and `access_token` after 3600 seconds.
 
-#### B. OAuth_client/server (Poort 8080)
+#### B. OAuth_client/server (Port 8080)
 
-**Installeer afhankelijkheden:**
+**Install dependencies:**
 
 ```bash
 cd ../../OAuth_client/server
 npm install
 ```
 
-**Creëer .env bestand:**
+**Create .env file:**
 
 ```
 DB_URI=<YOUR_DB_URI>
 COOKIE_SECRET=<YOUR_SECRET>
 ```
 
-**Start de server:**
+**Start the server:**
 
 ```bash
 npm start
-# De client server start op http://localhost:8080
+# The client server starts at http://localhost:8080
 ```
 
 ---
 
-### 3. Front-end Setup (Provider en Client Clients)
+### 3. Frontend Setup (Provider and Client Clients)
 
-Beide client-mappen moeten worden opgestart.
+Both client folders need to be started.
 
-#### A. OAuth_provider/client (Poort 5173)
+#### A. OAuth_provider/client (Port 5173)
 
-**Installeer afhankelijkheden:**
+**Install dependencies:**
 
 ```bash
 cd ../../OAuth_provider/client
 npm install
 ```
 
-**Start de client:**
+**Start the client:**
 
 ```bash
 npm run dev
-# De provider client start op http://localhost:5173
+# The provider client starts at http://localhost:5173
 ```
 
-#### B. OAuth_client/client (Poort 5174)
+#### B. OAuth_client/client (Port 5174)
 
-**Installeer afhankelijkheden:**
+**Install dependencies:**
 
 ```bash
 cd ../../OAuth_client/client
 npm install
 ```
 
-**Creëer .env bestand (belangrijk voor OAuth):**
-Maak een `.env`-bestand in deze map en definieer de volgende variabelen:
+**Create .env file (important for OAuth):**
 
 ```
 VITE_CLIENT_ID=<PLACEHOLDER_ID>
@@ -138,69 +135,66 @@ VITE_REDIRECT_URI=http://localhost:5174/#/auth/token
 VITE_REDIRECT_AFTER_TOKEN=/
 ```
 
-**Start de client:**
+**Start the client:**
 
 ```bash
 npm run dev
-# De client applicatie start op http://localhost:5174
+# The client application starts at http://localhost:5174
 ```
 
 ---
 
-## 🔐 Key Functionality (OAuth Flow)
+## Key Functionality (OAuth Flow)
 
-### Client Registratie
+### Client Registration
 
-Voordat de OAuth-flow kan starten, moet de client zich registreren bij de provider.
-Dit gebeurt op de client-applicatie via de route `/register/oauth`.
+Before the OAuth flow can start, the client must register with the provider via the `/register/oauth` route in the client application.
 
-De client stuurt de volgende data naar het registratie-endpoint van de provider:
+The client sends the following data to the provider's registration endpoint:
 
-- clientnaam
-- eigenaar-e-mail
-- omleidings-URL (`redirect_uri`)
-- gevraagde scope
+* client name
+* owner email
+* redirect URL (`redirect_uri`)
+* requested scope
 
-De provider genereert vervolgens een unieke **Client ID** en **Client Secret**.
+The provider generates a unique **Client ID** and **Client Secret**.
 
-> ⚠️ **ACTIE VEREIST:** De gegenereerde Client ID en Secret moeten vervolgens worden ingevuld in het `.env` bestand van de client-applicatie (`OAuth_client/client/.env`).
+> Action Required: The generated Client ID and Secret must be added to the client's `.env` file (`OAuth_client/client/.env`).
 
 ### Flow Start
 
-Wanneer een gebruiker op de client op "Login met itsyou" klikt, wordt de flow gestart:
+When a user clicks "Login with itsyou" on the client:
 
-1. De client stuurt de gebruiker naar de provider’s autorisatie-endpoint (`/auth/login`).
-2. De gebruiker logt in op de Provider-server en gaat naar de toestemmingspagina (`/auth/consent`).
-3. Bij goedkeuring geeft de provider een **Authorization Code** terug aan de client’s `redirect_uri`.
-4. De client wisselt deze code in bij `/oauth/token` voor een **Access Token**.
-5. De client vraagt gebruikersinformatie op via `/users/userinfo`.
-6. De client slaat de data lokaal op en leidt de gebruiker naar `/` (Home).
+1. The client redirects the user to the provider's authorization endpoint (`/auth/login`).
+2. The user logs in on the Provider server and is redirected to the consent page (`/auth/consent`).
+3. Upon approval, the provider returns an **Authorization Code** to the client's `redirect_uri`.
+4. The client exchanges this code at `/oauth/token` for an **Access Token**.
+5. The client fetches user information via `/users/userinfo`.
+6. The client stores the data locally and redirects the user to `/` (Home).
 
 ---
 
-## 📚 Gebruikte Bronnen
+## References
 
-- [Merlino - oauth steps](https://merlino.agency/blog/step-by-step-how-to-implement-oauth2-server-in-expressjs?utm_source=chatgpt.com)
-- [OAuth - example flow](https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/?utm_source=chatgpt.com)
-- [OAuth - OAuth2.0 en OpenID guide](https://auth0.com/resources/ebooks/oauth-openid-connect-professional-guide/thankyou)
-- [OAuth - Understanding OAuth2](https://medium.com/google-cloud+understanding-oauth2-and-building-a-basic-authorization-server-of-your-own-a-beginners-guide-cf7451a16f66)
-- [Stack Overflow - Session store VS database](https://stackoverflow.com/questions/33897276/what-is-the-difference-between-a-session-store-and-database)
-- [MongoDB - CreateIndex, delete from database after expired ](https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-createIndex/)
-- [Stack Overflow - createIndex](https://stackoverflow.com/questions/49410628/delete-data-from-a-mongodb-collection-when-date-expires)
-- [ExpressJS - Session](https://expressjs.com/en/resources/middleware/session.html)
-- [ChatGPT - Hulp voor het opbouwen en verduidelijken van het stappenplan](https://chatgpt.com/share/68e37139-d970-8004-8e95-773fcebc693e)
-- [ChatGPT - Hulp voor he opbouwen en verduidelijekn van het stappenplan 2](https://chatgpt.com/share/68e52953-8150-8004-9781-a482289e14f9)
+* [Merlino - OAuth steps](https://merlino.agency/blog/step-by-step-how-to-implement-oauth2-server-in-expressjs?utm_source=chatgpt.com)
+* [OAuth - Example flow](https://www.oauth.com/oauth2-servers/server-side-apps/example-flow/?utm_source=chatgpt.com)
+* [OAuth - OAuth2.0 and OpenID guide](https://auth0.com/resources/ebooks/oauth-openid-connect-professional-guide/thankyou)
+* [OAuth - Understanding OAuth2](https://medium.com/google-cloud+understanding-oauth2-and-building-a-basic-authorization-server-of-your-own-a-beginners-guide-cf7451a16f66)
+* [Stack Overflow - Session store VS database](https://stackoverflow.com/questions/33897276/what-is-the-difference-between-a-session-store-and-database)
+* [MongoDB - CreateIndex, delete after expiration](https://www.mongodb.com/docs/php-library/current/reference/method/MongoDBCollection-createIndex/)
+* [Stack Overflow - createIndex](https://stackoverflow.com/questions/49410628/delete-data-from-a-mongodb-collection-when-date-expires)
+* [ExpressJS - Session](https://expressjs.com/en/resources/middleware/session.html)
 
 ---
 
 ## Research
 
-[Bekijk mijn onderzoek naar OAuth](./OAuth-research.md)
+[View my OAuth research](./OAuth-research.md)
 
-## 🧑‍💻 Author
+## Author
 
-Sam Hoeterickx <br>
-Student Multimedia & Creative Technology <br>
-Erasmushogeschool Brussel <br>
-[Linkedin](https://www.linkedin.com/in/sam-hoeterickx/) <br>
-[portfolio](https://www.samhoeterickx.be)
+Sam Hoeterickx
+Student Multimedia & Creative Technology
+Erasmus University College Brussels
+[LinkedIn](https://www.linkedin.com/in/sam-hoeterickx/)
+[Portfolio](https://www.samhoeterickx.be)
