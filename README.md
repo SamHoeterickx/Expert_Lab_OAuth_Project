@@ -193,8 +193,11 @@ When a user clicks "Login with itsyou" on the client:
 
 ## Author
 
-Sam Hoeterickx
-Student Multimedia & Creative Technology
-Erasmus University College Brussels
-[LinkedIn](https://www.linkedin.com/in/sam-hoeterickx/)
-[Portfolio](https://www.samhoeterickx.be)
+## Author
+
+Sam Hoeterickx <br>
+Student Multimedia & Creative Technology <br>
+Erasmushogeschool Brussel <br>
+[Linkedin](https://www.linkedin.com/in/sam-hoeterickx/) <br>
+[portfolio](https://www.samhoeterickx.be) <br>
+
