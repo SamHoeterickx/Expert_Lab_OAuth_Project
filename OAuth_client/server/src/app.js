@@ -59,7 +59,12 @@ app.use('/api/oauth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', sessionRoutes);
 
-app.use('/', (req, res) => console.log("Hello world"));
+app.get('/api/', (req, res) => {
+    return res.status(200).send({
+        status: 200,
+        message: 'Hello world'
+    })
+});
 
 const startServer = async () => {
     try{
