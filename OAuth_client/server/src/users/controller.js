@@ -1,9 +1,9 @@
-const { findUserById } = require('../../../../OAuth_provider/server/src/users/model.js');
 const {
     createNewUser,
     findUserByEmail,
     verifyPassword,
-    addUserToDB
+    addUserToDB,
+    findUserById
 } = require('./model.js');
 
 const register = async (req, res, userCollection) => {
@@ -223,7 +223,7 @@ const getMyUserData = async(req, res, userCollection) => {
             });
         }
 
-        const user = await findUserById(userId, userCollection);
+        const user = await findUserById(userCollection, userId);
 
         if(!user){
             return res.status(404).send({

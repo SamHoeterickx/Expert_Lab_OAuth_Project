@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { ObjectId } = require('mongodb');
 
 const createNewUser = async (userCollection, userData) => {
 
@@ -30,9 +31,18 @@ const addUserToDB = async (userCollection, data) => {
     return result
 }
 
+const findUserById = async(usercollection, userId) => {
+    const result = await usercollection.findOne({
+        _id: new ObjectId(userId) 
+    });
+
+    return result
+}
+
 module.exports = {
     createNewUser,
     findUserByEmail,
     verifyPassword,
     addUserToDB,
+    findUserById
 }
