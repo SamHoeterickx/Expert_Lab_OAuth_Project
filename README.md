@@ -195,8 +195,6 @@ When a user clicks "Login with itsyou" on the client:
 
 ## Author
 
-## Author
-
 Sam Hoeterickx <br>
 Student Multimedia & Creative Technology <br>
 Erasmushogeschool Brussel <br>
