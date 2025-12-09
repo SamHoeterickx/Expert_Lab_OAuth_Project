@@ -2,6 +2,8 @@
 
 This project implements a full OAuth 2.0 Authorization Code Flow and OpenID Connect based on a separated microservice architecture. It consists of two independent applications: an OAuth Client ("Resource Server") and an OAuth Provider ("Authorization Server").
 
+> This project is part of the expert lab course at EHB
+
 ---
 
 ## Project Architecture
