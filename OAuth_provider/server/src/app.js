@@ -3,7 +3,8 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
-const { MongoClient } = require('mongodb')
+const { MongoClient } = require('mongodb');
+const MongoStore = require('connect-mongo');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,6 +36,12 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     proxy: true,
+    store: MongoStore.create({
+        mongoUrl: process.env.DB_URI,
+        dbName: DB_NAME,
+        collectionName: 'sessions',
+        ttl: 24 * 60 * 60 
+    }),
     cookie: {
         httpOnly: true,
         secure: true,
@@ -55,12 +62,7 @@ app.use(session({
 // }));
 
 app.use(cors({
-    origin: [
-        'http://localhost:5174', 
-        'http://localhost:5173',
-        'https://skyblue-hyena-257309.hostingersite.com',
-        'https://www.skyblue-hyena-257309.hostingersite.com'
-    ],
+    origin: true, 
     credentials: true
 }));
 app.use(express.json());
