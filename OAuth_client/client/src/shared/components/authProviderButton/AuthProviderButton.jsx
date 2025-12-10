@@ -9,14 +9,24 @@ export const AuthProviderButton = () => {
         const client_id = import.meta.env.VITE_CLIENT_ID;
         const redirect_uri = encodeURIComponent(import.meta.env.VITE_REDIRECT_URI);
 
-        fetch(`https://expert-lab-oauth-project-client.onrender.com/api/oauth/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}`, {
+        const backendUrl = "https://expert-lab-oauth-project-client.onrender.com"; 
+
+        fetch(`${backendUrl}/api/oauth/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}`, {
             headers: { 'Content-type': "application/json" },
             credentials: 'include'
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // Toon de echte fout als het misgaat, in plaats van te crashen op JSON
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log("Redirecting to:", data.redirectUrl); // Debugging
             window.location.href = data.redirectUrl;
-        });
+        })
+        .catch(err => console.error("Fout bij ophalen auth URL:", err));
     }
 
     return (
