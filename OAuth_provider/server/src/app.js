@@ -6,7 +6,7 @@ const session = require('express-session');
 const { MongoClient } = require('mongodb')
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 //DB Setup
 const uri = process.env.DB_URI;
@@ -56,13 +56,7 @@ app.use(cors({
     origin: [
         'http://localhost:5174', 
         'http://localhost:5173',
-        'https://skyblue-hyena-257309.hostingersite.com/', 
-        'https://skyblue-hyena-257309.hostingersite.com/#', 
-        'https://skyblue-hyena-257309.hostingersite.com/#/', 
         'https://skyblue-hyena-257309.hostingersite.com',
-        'https://www.skyblue-hyena-257309.hostingersite.com/', 
-        'https://www.skyblue-hyena-257309.hostingersite.com/#', 
-        'https://www.skyblue-hyena-257309.hostingersite.com/#/', 
         'https://www.skyblue-hyena-257309.hostingersite.com'
     ],
     credentials: true
