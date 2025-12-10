@@ -64,7 +64,7 @@ const register = async (req, res, userCollection) => {
 
         res.cookie('userId', sessionId, {
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             signed: true,
             maxAge: 24 * 60 * 60 * 1000
         });
@@ -119,7 +119,7 @@ const login = async (req, res, userCollection) => {
 
         res.cookie('userId', sessionId, {
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             signed: true,
             maxAge: 24 * 60 * 60 * 1000
         });
@@ -153,7 +153,7 @@ const saveUser = async (req, res, userCollection) => {
 
             res.cookie('userId', sessionId, {
                 httpOnly: true,
-                sameSite: 'lax',
+                sameSite: 'none',
                 signed: true,
                 maxAge: 24 * 60 * 60 * 1000
             });
@@ -192,7 +192,7 @@ const saveUser = async (req, res, userCollection) => {
 
         res.cookie('userId', sessionId, {
             httpOnly: true,
-            sameSite: 'lax',
+            sameSite: 'none',
             signed: true,
             maxAge: 24 * 60 * 60 * 1000
         });
