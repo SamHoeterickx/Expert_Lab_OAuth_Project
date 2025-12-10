@@ -34,9 +34,11 @@ app.use(session({
     secret: COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
@@ -62,6 +64,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(express.json());
+app.set('trust proxy', 1)
 
 
 const userRoutes = require('./users/route')(userCollection, accessTokenCollection, OAuthClientCollection);
