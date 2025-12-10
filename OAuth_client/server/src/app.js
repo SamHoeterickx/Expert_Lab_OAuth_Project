@@ -24,9 +24,11 @@ app.use(session({
     secret: COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
-    coookie: {
+    proxy: true,
+    cookie: {
         httpOnly: true,
-        secure: false,
+        secure: true,
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
@@ -48,18 +50,12 @@ app.use(cors({
         'http://localhost:5174', 
         'http://localhost:5173',
         'https://lightpink-gorilla-173264.hostingersite.com',
-        'https://lightpink-gorilla-173264.hostingersite.com/',
-        'https://lightpink-gorilla-173264.hostingersite.com/#',
-        'https://lightpink-gorilla-173264.hostingersite.com/#/',
-        'https://www.lightpink-gorilla-173264.hostingersite.com',
-        'https://www.lightpink-gorilla-173264.hostingersite.com/',
-        'https://www.lightpink-gorilla-173264.hostingersite.com/#',
-        'https://www.lightpink-gorilla-173264.hostingersite.com/#/',
+        'https://www.lightpink-gorilla-173264.hostingersite.com'
     ],
     credentials: true
 }));
 app.use(express.json());
-
+app.set('trust proxy', 1)
 
 //Routes
 const authRoutes = require('./auth/route')(authStateCollection);
