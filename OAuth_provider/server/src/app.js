@@ -4,7 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const session = require('express-session');
 const { MongoClient } = require('mongodb');
-const MongoStore = require('connect-mongo');
+const { MongoStore } = require('connect-mongo');
 
 const app = express();
 const port = process.env.PORT || 3000;
