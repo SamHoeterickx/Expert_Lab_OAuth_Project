@@ -9,7 +9,7 @@ export const AuthProviderButton = () => {
         const client_id = import.meta.env.VITE_CLIENT_ID;
         const redirect_uri = encodeURIComponent(import.meta.env.VITE_REDIRECT_URI);
 
-        fetch(`http://localhost:8080/api/oauth/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}`, {
+        fetch(`https://expert-lab-oauth-project-client.onrender.com/api/oauth/auth?client_id=${client_id}&redirect_uri=${encodeURIComponent(redirect_uri)}`, {
             headers: { 'Content-type': "application/json" },
             credentials: 'include'
         })

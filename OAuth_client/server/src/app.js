@@ -44,7 +44,18 @@ app.use(session({
 
 app.use(cookieParser(COOKIE_SECRET));
 app.use(cors({
-    origin: ['http://localhost:5174', 'http://localhost:5173'],
+    origin: [
+        'http://localhost:5174', 
+        'http://localhost:5173',
+        'https://lightpink-gorilla-173264.hostingersite.com',
+        'https://lightpink-gorilla-173264.hostingersite.com/',
+        'https://lightpink-gorilla-173264.hostingersite.com/#',
+        'https://lightpink-gorilla-173264.hostingersite.com/#/',
+        'https://www.lightpink-gorilla-173264.hostingersite.com',
+        'https://www.lightpink-gorilla-173264.hostingersite.com/',
+        'https://www.lightpink-gorilla-173264.hostingersite.com/#',
+        'https://www.lightpink-gorilla-173264.hostingersite.com/#/',
+    ],
     credentials: true
 }));
 app.use(express.json());

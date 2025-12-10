@@ -25,7 +25,7 @@ export const RegisterOauth = () => {
 
     const handleFormSubmition = (e) => {
         e.preventDefault();
-        fetch('http://localhost:3000/api/oauth/register_client', {
+        fetch('https://expert-lab-oauth-project.onrender.com/api/oauth/register_client', {
             method: 'POST',
             credentials: 'include',
             headers: {

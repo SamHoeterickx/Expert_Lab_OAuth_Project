@@ -17,7 +17,7 @@ export const Home = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch('http://localhost:8080/api/users/get-my-data', {
+        fetch('https://expert-lab-oauth-project-client.onrender.com/api/users/get-my-data', {
             credentials: 'include'
         })
         .then(response => response.json())
@@ -29,7 +29,7 @@ export const Home = () => {
     }, []);
     
     const handleLogout = () => {
-        fetch('http://localhost:8080/api/users/logout', {
+        fetch('https://expert-lab-oauth-project-client.onrender.com/api/users/logout', {
             credentials: 'include'
         })
         .then(response => response.json())

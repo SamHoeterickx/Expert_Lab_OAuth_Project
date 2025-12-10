@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ children, redirect_path }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/check-session", {
+        fetch("https://expert-lab-oauth-project-client.onrender.com/api/check-session", {
             credentials: "include"
         })
         .then(response => response.json())
