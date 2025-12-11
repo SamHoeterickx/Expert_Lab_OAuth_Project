@@ -1,3 +1,12 @@
+// Kleurenpalet
+$itsyou-primary: #FF5A00;
+$itsyou-primary-hover: $itsyou-primary, 10%;
+$itsyou-bg: #f8f9fb; 
+$itsyou-dark: #1f1f1f; 
+$itsyou-grey: #ccc;
+$itsyou-error: #e53935;
+
+
 .register-oauth-wrapper {
     font-family: Arial, sans-serif;
     background-color: #f5f6f7;
@@ -8,6 +17,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    position: relative;
 
     h2 {
         color: #ff0000;
@@ -15,6 +25,22 @@
         font-size: 1.8rem;
         font-weight: bold;
         text-align: center;
+        margin-top: 15dvh;
+    }
+
+    &::before {
+        content: "itsYOU";
+        font-weight: 800;
+        font-size: 2.5rem;
+        color: #fff;
+        background-color: $itsyou-primary;
+        border-radius: 1rem;
+        padding: 0.5rem 1.2rem;
+        text-transform: lowercase;
+        margin-bottom: 2rem;
+        display: inline-block;
+        position: absolute;
+        top: 2rem;
     }
 }
 
@@ -44,6 +70,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+
 
     &--input-field {
         display: flex;
