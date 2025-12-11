@@ -6,6 +6,50 @@ This project implements a full OAuth 2.0 Authorization Code Flow and OpenID Conn
 
 ---
 
+## Live links
+OAuth provider: https://skyblue-hyena-257309.hostingersite.com/#/login <br>
+OAuth client example: https://lightpink-gorilla-173264.hostingersite.com/#/login
+
+## Step By Step Guide
+To implement this provider in your own website please follow the next steps <br>
+
+### Step 1: Register your Application
+```bash
+  Login or create account: https://skyblue-hyena-257309.hostingersite.com/#/login
+  Then register OAuth
+  Enter your application details
+    name, owner email, redirect URL, base URL and desired scope
+```
+### Step 2: Save Generated Values
+```bash
+  VITE_CLIENT_ID=<CLIENT_ID>
+  VITE_CLIENT_SECRET=<CLIENT_SECRET>
+  VITE_REDIRECT_URI=<REDIRECT_URL>
+  VITE_BASE_URI=<BASE_URL>
+  VITE_REDIRECT_AFTER_TOKEN=<REDIRECT_URL>
+```
+### Step 3: Implement Login Code
+To initiate the OAuth flow, your frontend should redirect the user to the Provider.<br>
+Recommended Approach: Do not hardcode the URL in a button. Instead, construct it dynamically (or fetch it from your backend) to ensure the parameters are correct.
+```javascript
+  const handleLogin = (e) => {
+      e.preventDefault();
+  
+      // 1. Configuration
+      const client_id = import.meta.env.VITE_CLIENT_ID;
+      const redirect_uri = encodeURIComponent(import.meta.env.VITE_REDIRECT_URI);
+      // The Live Provider Backend
+      const providerBaseUrl = "https://expert-lab-oauth-project.onrender.com"; 
+  
+      // 2. Construct the Authorization URL
+      // Endpoint: /auth/login
+      // Params: client_id, redirect_uri, response_type=code, scope
+      const authUrl = `${providerBaseUrl}/auth/login?client_id=${client_id}&redirect_uri=${redirect_uri}&response_type=code&scope=openid`;
+  
+      // 3. Redirect the user
+      window.location.href = authUrl;
+  }
+```
 ## Project Architecture
 
 The project is split into two main folders, each forming a separate application:
