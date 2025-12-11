@@ -1,0 +1,58 @@
+// Kleurenpalet
+$itsyou-primary: #FF5A00;
+$itsyou-primary-hover: $itsyou-primary, 10%;
+$itsyou-bg: #f8f9fb; 
+$itsyou-dark: #1f1f1f; 
+$itsyou-grey: #ccc;
+$itsyou-error: #e53935;
+
+.home-wrapper{
+    height: 100dvh;
+    width: 100dvw;
+    background-color: $itsyou-bg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: $itsyou-dark;
+    position: relative;
+
+    .button{
+        background-color: $itsyou-primary;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.9rem 1rem;
+        font-weight: 700;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+
+        &:hover {
+            background-color: $itsyou-primary-hover;
+        }
+
+        &:disabled {
+            background-color: $itsyou-primary;
+            cursor: not-allowed;
+        }
+
+    }
+
+    &::before {
+        content: "itsYOU";
+        font-weight: 800;
+        font-size: 2.5rem;
+        color: #fff;
+        background-color: $itsyou-primary;
+        border-radius: 1rem;
+        padding: 0.5rem 1.2rem;
+        text-transform: lowercase;
+        margin-bottom: 2rem;
+        display: inline-block;
+        position: absolute;
+        top: 2rem;
+    }
+}

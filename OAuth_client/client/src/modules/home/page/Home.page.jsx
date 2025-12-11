@@ -6,9 +6,6 @@ import clsx from 'clsx'
 //Style
 import styles from './home.module.scss';
 
-//Routes
-import { REGISTER_OAUTH_ROUTE } from '../../registerOauth/registerOauth.root';
-
 export const Home = () => {
 
     const [userData, setUserData] = useState(undefined);
@@ -43,12 +40,6 @@ export const Home = () => {
         <div className={clsx(styles["home-container"])}>
            <div className={clsx(styles["hero-header"])}>
                 { userData ? <h1>Welkom {userData.name} </h1> : <h1>Welkom, ...</h1> }
-                <div className={clsx(styles["button-wrapper"])}>
-                    <Link to={REGISTER_OAUTH_ROUTE.path} className={clsx(styles["link-button"])}>Register Client</Link>
-                    {
-                        !isLoggedIn ? <Link to="/login" className={clsx(styles["link-button"])}>Login</Link> : <button onClick={ handleLogout } className={clsx(styles["link-button"])}>Logout</button>
-                    }
-                </div>
            </div>
 
             <div className={clsx(styles["dashboard"])}>

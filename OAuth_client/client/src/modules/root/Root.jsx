@@ -8,7 +8,6 @@ import { HOME_ROUTE } from "../home/home.route";
 import { LOG_IN_ROUTE } from "../login/login.route";
 import { REGISTER_ROUTE } from "../register/register.route";
 import { TOKEN_ROUTE } from "../auth/token/token.route";
-import { REGISTER_OAUTH_ROUTE } from "../registerOauth/registerOauth.root";
 
 export const Root = () => {
     const ROUTE = createHashRouter([
