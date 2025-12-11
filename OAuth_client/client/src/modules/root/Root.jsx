@@ -32,10 +32,6 @@ export const Root = () => {
                     path: TOKEN_ROUTE.path,
                     element: TOKEN_ROUTE.element
                 },
-                {
-                    path: REGISTER_OAUTH_ROUTE.path,
-                    element: REGISTER_OAUTH_ROUTE.element
-                }
             ]
         }
     ]);

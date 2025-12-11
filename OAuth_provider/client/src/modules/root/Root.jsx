@@ -9,6 +9,7 @@ import { LOG_IN_ROUTE } from "../login/login.route";
 import { AUTH_LOGIN_ROUTE } from "../auth/login/authLogin.route";
 import { REGISTER_ROUTE } from "../register/register.route";
 import { AUTH_CONSENT_ROUTE } from "../auth/consent/authConsent.route";
+import { REGISTER_OAUTH_ROUTE } from "../registerOauth/registerOauth.root";
 
 export const Root = () => {
     const ROUTE = createHashRouter([
@@ -35,6 +36,10 @@ export const Root = () => {
                 {
                     path: AUTH_CONSENT_ROUTE.path,
                     element: AUTH_CONSENT_ROUTE.element
+                },
+                {
+                    path: REGISTER_OAUTH_ROUTE.path,
+                    element: REGISTER_OAUTH_ROUTE.element
                 }
             ]
         }

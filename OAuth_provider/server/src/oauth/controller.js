@@ -122,7 +122,7 @@ const registerClient = async(req, res, collection) => {
                 status: 201,
                 message: "OAuth client registered succesfully",
                 client_id: client_id,
-                client_secret: client_secret
+                client_secret: client_secret,
             });
         }
 
